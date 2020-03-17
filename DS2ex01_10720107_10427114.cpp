@@ -169,14 +169,14 @@ class Heap{
 
 };
 
-void Heap::BuildHeap( vector<CollegeType> classSet, int size ) {
+void Heap::BuildHeap( vector<CollegeType> classSet, int size ) { // 建立Heap 
 
     item = new heapNode[size] ; //建立Array 
-	for( int i = 0; i < size ; i ++ ){
+	for( int i = 0; i <= size ; i ++ ){
 		// if( sizeH >= size )
 		// 	cout << "HeapFull" ;
 			
-		int place = sizeH ;
+		int place = i ;
 		int parent = ( place - 1 ) / 2 ;
 		
 
@@ -187,28 +187,36 @@ void Heap::BuildHeap( vector<CollegeType> classSet, int size ) {
 		while( ( parent >= 0 ) && ( item[place].gdNum > item[parent].gdNum ) ){ // 重新排順序 
 
            	int tempGd ;
-           	// int tempPlace ;
+           	int tempPlace ;
            	
            	tempGd = item[parent].gdNum ;
-           	// tempGd = item[parent].place ;
+           	tempGd = item[parent].place ;
            	
            	item[parent].gdNum = item[place].gdNum ;
-           	// item[parent].place = item[place].place ;
+           	item[parent].place = item[place].place ;
            	
            	item[place].gdNum = tempGd ;
-           	// item[place].place = tempPlace ;
+           	item[place].place = tempPlace ;
             
 			place = parent ;
 			parent = ( place - 1 )/ 2 ;
 		} // while
         
 		
-		sizeH ++ ;
+	
 	} // for
 	
 	cout << "<min heap>" << "\n" ; // 開始印資料 
 	cout << "root:" <<"["<< item[0].place <<"]" ;
 	cout << item[0].gdNum << "\n" ; 
+	
+	cout << "bottom:" << "[" << item[size-1].place << "]" ;
+	cout << item[size-1].gdNum << "\n" ;
+	
+
+    /*for( int j = 0 ; j < size ; j++ ){
+    	cout << item[j].place << "\n";
+	} // for*/
 
 	
 } // BuildHeap
