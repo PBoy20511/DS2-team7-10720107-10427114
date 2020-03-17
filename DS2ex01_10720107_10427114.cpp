@@ -1,4 +1,4 @@
-// 10720107 ���A�� 10427114 ���[�@ 
+// 10720107 陳丕中 10427114 熊觀一 
 
 #include<iostream> 
 #include<cstdio>
@@ -35,7 +35,7 @@ class ClassList{
 	}
 	
 	bool Load( string fileName ) { 
-	// Ū�J���
+	// 讀入資料
 	 
     	FILE *infile = NULL ;
     	bool success = false ;
@@ -159,18 +159,19 @@ class Heap{
 	}
 	
 		
-	bool heapIsEmpty( ) ; // done
-	void heapDelete( heapNode rootCollege, int size ) ; // done
-	void heapRebuild( int root ) ; // done
-	void BuildHeap( vector<CollegeType> classSet, int size ) ; // done
+	bool heapIsEmpty( ) ; 
+	void heapDelete( heapNode rootCollege, int size ) ; 
+	void heapRebuild( int root ) ; 
+	void BuildHeap( vector<CollegeType> classSet, int size ) ; 
 	void InsertHeap() ;
+	void PrintM1() ;
      
 
 };
 
 void Heap::BuildHeap( vector<CollegeType> classSet, int size ) {
 
-    item = new heapNode[size] ;
+    item = new heapNode[size] ; //建立Array 
 	for( int i = 0; i < size ; i ++ ){
 		if( sizeH >= size )
 			cout << "HeapFull" ;
@@ -179,20 +180,20 @@ void Heap::BuildHeap( vector<CollegeType> classSet, int size ) {
 		int parent = ( place - 1 ) / 2 ;
 		
 
-		item[i].gdNum = classSet[i].numGraduate ;
+		item[i].gdNum = classSet[i].numGraduate ; //  先將ClassSet的資料放入Heap最左邊 
 		item[i].place = place ;
 
 		
-		while( ( parent >= 0 ) && ( item[place].gdNum > item[parent].gdNum ) ){
+		while( ( parent >= 0 ) && ( item[place].gdNum > item[parent].gdNum ) ){ // 重新排順序 
 
            	int tempGd ;
-           	int tempPlace ;
+           	// int tempPlace ;
            	tempGd = item[parent].gdNum ;
-           	tempGd = item[parent].place ;
+           	// tempGd = item[parent].place ;
            	item[parent].gdNum = item[place].gdNum ;
-           	item[parent].place = item[place].place ;
+           	// item[parent].place = item[place].place ;
            	item[place].gdNum = tempGd ;
-           	item[place].place = tempPlace ;
+           	// item[place].place = tempPlace ;
             
 			place = parent ;
 			parent = ( place - 1 )/ 2 ;
@@ -201,6 +202,11 @@ void Heap::BuildHeap( vector<CollegeType> classSet, int size ) {
 		
 		sizeH ++ ;
 	} // for
+	
+	cout << "<min heap>" << "\n" ;
+	cout <<"["<< item[0].place <<"]" ;
+	cout << item[0].gdNum ; 
+
 	
 } // BuildHeap
 
@@ -242,6 +248,11 @@ bool Heap::heapIsEmpty( ) {
 } // heapIsEmpty()
 
 
+void Heap::PrintM1(){
+	
+	
+} // PrintM1()
+
 
 int main() {
 	
@@ -259,9 +270,9 @@ int main() {
 			string fileName ;
 			cin >> fileName ;
 			
-			if ( classList.Load( fileName ) ) { // Ū�J�ɮ� 
+			if ( classList.Load( fileName ) ) { // 讀入檔案 
 			    int size = classList.GetSet().size() ; 
-				heapGrd.BuildHeap( classList.GetSet() , size) ; // �إ�Heap 
+				heapGrd.BuildHeap( classList.GetSet() , size) ; // 建立Heap 
 			} // if
 			else
 				cout << "File not found.\n" ;
@@ -274,7 +285,6 @@ int main() {
 		cin >> cmd ;
 	} // whilef
 } // main()
-
 
 
 
