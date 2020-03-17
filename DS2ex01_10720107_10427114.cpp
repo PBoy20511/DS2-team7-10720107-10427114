@@ -173,25 +173,28 @@ void Heap::BuildHeap( vector<CollegeType> classSet, int size ) {
 
     item = new heapNode[size] ; //建立Array 
 	for( int i = 0; i < size ; i ++ ){
-		if( sizeH >= size )
-			cout << "HeapFull" ;
+		// if( sizeH >= size )
+		// 	cout << "HeapFull" ;
 			
 		int place = sizeH ;
 		int parent = ( place - 1 ) / 2 ;
 		
 
 		item[i].gdNum = classSet[i].numGraduate ; //  先將ClassSet的資料放入Heap最左邊 
-		item[i].place = place ;
+		item[i].place = place + 1 ; // 從一開始的序號 
 
 		
 		while( ( parent >= 0 ) && ( item[place].gdNum > item[parent].gdNum ) ){ // 重新排順序 
 
            	int tempGd ;
            	// int tempPlace ;
+           	
            	tempGd = item[parent].gdNum ;
            	// tempGd = item[parent].place ;
+           	
            	item[parent].gdNum = item[place].gdNum ;
            	// item[parent].place = item[place].place ;
+           	
            	item[place].gdNum = tempGd ;
            	// item[place].place = tempPlace ;
             
@@ -203,9 +206,9 @@ void Heap::BuildHeap( vector<CollegeType> classSet, int size ) {
 		sizeH ++ ;
 	} // for
 	
-	cout << "<min heap>" << "\n" ;
-	cout <<"["<< item[0].place <<"]" ;
-	cout << item[0].gdNum ; 
+	cout << "<min heap>" << "\n" ; // 開始印資料 
+	cout << "root:" <<"["<< item[0].place <<"]" ;
+	cout << item[0].gdNum << "\n" ; 
 
 	
 } // BuildHeap
@@ -246,12 +249,6 @@ bool Heap::heapIsEmpty( ) {
 		return false ;
 	}
 } // heapIsEmpty()
-
-
-void Heap::PrintM1(){
-	
-	
-} // PrintM1()
 
 
 int main() {
