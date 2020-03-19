@@ -151,6 +151,9 @@ struct heapNode{
 class Heap{
 	int sizeH = 0 ;
 	heapNode *item;
+	vector <heapNode> heapSet ; // EX
+
+    
 
     public:	
 	Heap(){
@@ -162,17 +165,34 @@ class Heap{
 	bool heapIsEmpty( ) ; 
 	void heapDelete( heapNode rootCollege, int size ) ; 
 	void heapRebuild( int root ) ; 
-	void BuildHeap( vector<CollegeType> classSet, int size ) ; 
+	void BuildHeap( vector<CollegeType> classSet ) ; 
 	void InsertHeap() ;
 	void PrintM1() ;
+	void BuildHeapEX( vector<CollegeType> classSet ) ;
+	int LeftMost( int size ) ;
      
 
 };
 
-void Heap::BuildHeap( vector<CollegeType> classSet, int size ) { // 建立Heap 
 
+void Heap::BuildHeapEX( vector<CollegeType> classSet ){ //用vector建立Heap
+	/*for( int i = 0; i < size; i++ ){
+		int place = 1 ;
+		int parent = ( place - 1 ) / 2 ;
+		heapNode walk ;
+		walk.gdNum = classSet[i].numGraduate ;
+		walk.place = palce + 1 ;
+		heapSet.push_back( walk ) ;
+	} // for*/
+	
+} // BuildHeapEX() 用Vector NOT DONE YET
+
+
+void Heap::BuildHeap( vector<CollegeType> classSet ) { // 建立Heap 
+
+    int size = classSet.size() ;
     item = new heapNode[size] ; //建立Array 
-	for( int i = 0; i <= size ; i ++ ){
+	for( int i = 0; i < size ; i ++ ){
 		// if( sizeH >= size )
 		// 	cout << "HeapFull" ;
 			
@@ -184,13 +204,13 @@ void Heap::BuildHeap( vector<CollegeType> classSet, int size ) { // 建立Heap
 		item[i].place = place + 1 ; // 從一開始的序號 
 
 		
-		while( ( parent >= 0 ) && ( item[place].gdNum > item[parent].gdNum ) ){ // 重新排順序 
+		while( ( parent >= 0 ) && ( item[place].gdNum < item[parent].gdNum ) && (place >= 0)){ // 重新排順序 
 
            	int tempGd ;
            	int tempPlace ;
            	
            	tempGd = item[parent].gdNum ;
-           	tempGd = item[parent].place ;
+           	tempPlace = item[parent].place ;
            	
            	item[parent].gdNum = item[place].gdNum ;
            	item[parent].place = item[place].place ;
@@ -206,20 +226,36 @@ void Heap::BuildHeap( vector<CollegeType> classSet, int size ) { // 建立Heap
 	
 	} // for
 	
+	
+	
 	cout << "<min heap>" << "\n" ; // 開始印資料 
 	cout << "root:" <<"["<< item[0].place <<"]" ;
 	cout << item[0].gdNum << "\n" ; 
 	
 	cout << "bottom:" << "[" << item[size-1].place << "]" ;
-	cout << item[size-1].gdNum << "\n" ;
+	cout << item[size-1].gdNum << "\n" ; 
+	
+	cout << "leftmost bottom:[" ; 
+	cout << item[LeftMost(size)].place << "]" ;
+	cout << item[LeftMost(size)].gdNum << "\n" ;  
 	
 
     /*for( int j = 0 ; j < size ; j++ ){
-    	cout << item[j].place << "\n";
+    	cout << item[j].place << "  " << item[j].gdNum << "\n";
 	} // for*/
 
 	
 } // BuildHeap
+
+int Heap::LeftMost( int size ) { // 找到最左節點的位置 
+	int place = 0 ;
+    for ( int i = place ; i < size ; i++ ){
+    	place = i ;
+    	i*2 ;
+	} // for
+	
+	return place ;
+} // LeftMost
 
 void Heap::heapDelete( heapNode rootItem, int size ) {
 	if ( heapIsEmpty( ) )
@@ -277,7 +313,7 @@ int main() {
 			
 			if ( classList.Load( fileName ) ) { // 讀入檔案 
 			    int size = classList.GetSet().size() ; 
-				heapGrd.BuildHeap( classList.GetSet() , size) ; // 建立Heap 
+				heapGrd.BuildHeap( classList.GetSet() ) ; // 建立Heap 
 			} // if
 			else
 				cout << "File not found.\n" ;
@@ -288,20 +324,8 @@ int main() {
 		
 		cout << "(1)Build Heap(0)Exit\nCommand:" ;
 		cin >> cmd ;
-	} // whilef
+	} // while
 } // main()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
