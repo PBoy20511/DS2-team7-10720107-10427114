@@ -249,9 +249,8 @@ void Heap::BuildHeap( vector<CollegeType> classSet ) { // 建立Heap
 
 int Heap::LeftMost( int size ) { // 找到最左節點的位置 
 	int place = 0 ;
-    for ( int i = place ; i < size ; i++ ){
-    	place = i ;
-    	i*2 ;
+    for ( int i = 1 ; i < size ; i = i*2 ){
+    	place = i-1 ;
 	} // for
 	
 	return place ;
