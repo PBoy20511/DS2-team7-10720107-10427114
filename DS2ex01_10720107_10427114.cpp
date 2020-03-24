@@ -193,11 +193,11 @@ void Heap::BuildHeap( vector<schoolType> classSet ) { // �إ�Heap
 		int parent = ( place - 1 ) / 2 ;
 		
 
-		item[i].gdNum = classSet[i].ngrad ; //  ���NClassSet����Ʃ�JHeap�̥��� 
-		item[i].place = place + 1 ; // �q�@�}�l���Ǹ� 
+		item[i].gdNum = classSet[i].ngrad ; //  Put deta in it
+		item[i].place = place + 1 ; // 序號 
 
 		
-		while( ( parent >= 0 ) && ( item[place].gdNum < item[parent].gdNum ) && (place >= 0)){ // ���s�ƶ��� 
+		while( ( parent >= 0 ) && ( item[place].gdNum < item[parent].gdNum ) && (place >= 0)){ // 跟parent比較
 
            	int tempGd ;
            	int tempPlace ;
@@ -212,7 +212,8 @@ void Heap::BuildHeap( vector<schoolType> classSet ) { // �إ�Heap
            	item[place].place = tempPlace ;
             
 			place = parent ;
-			parent = ( place - 1 )/ 2 ;
+			parent = ( place - 1 )/ 2 ; // 交換
+			
 		} // while
         
 		
@@ -221,7 +222,7 @@ void Heap::BuildHeap( vector<schoolType> classSet ) { // �إ�Heap
 	
 	
 	
-	cout << "<min heap>" << "\n" ; // �}�l�L��� 
+	cout << "<min heap>" << "\n" ; // 開始列印 
 	cout << "root:" <<"["<< item[0].place <<"]" ;
 	cout << item[0].gdNum << "\n" ; 
 	
@@ -235,12 +236,12 @@ void Heap::BuildHeap( vector<schoolType> classSet ) { // �إ�Heap
 
     /*for( int j = 0 ; j < size ; j++ ){
     	cout << item[j].place << "  " << item[j].gdNum << "\n";
-	} // for*/
+	} // for 找錯誤*/
 
 	
 } // BuildHeap
 
-int Heap::LeftMost( int size ) { // ���̥��`�I����m 
+int Heap::LeftMost( int size ) { // 找最左
 	int place = 0 ;
     for ( int i = 1 ; i < size ; i=i*2 ){
     	place = i-1 ;
