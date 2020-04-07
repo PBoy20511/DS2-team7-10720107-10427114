@@ -157,25 +157,6 @@ void SchoolList::printFile() {
 
 
 //************* mission 2 *************//
-// vector<int> searchAVLtree() {
-
-//     vector<int> ridS;
-//     nodeType *cur = root ;
-
-//     while (cur != NULL) {
-
-//         if ( !sKey.compare(cur->key) ) {
-//             ridS = cur->rSet ;
-//             break ;
-//         } // end if
-//         else if ( !sKey.compare(cur->key) < 0 )
-//             cur = cur->leftChild ;
-//         else cur = cur->rightChild ;
-//     } // end while
-
-//     return ridS ;
-
-// } // end searchAVLtree
 
 class AVLtree {         // class of AVLtree
 
