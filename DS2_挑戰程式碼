@@ -263,18 +263,29 @@ class AVLtree {         // class of AVLtree
         root = insertAVL(data_ngrad_idx, data_ngrad, root);
     } // end insertAVL
 
-    void inorder(nodeType* cur, std::vector<schoolType> array, int &num){
+    void inorderAlter(nodeType* cur, std::vector<schoolType> array, int &num){
     
         if(cur == NULL)
             return;
 
-        inorder(cur->right, array, num);
+        inorderAlter(cur->right, array, num);
         if ( num > 0 ) {
             display(cur, array) ;
             num-- ;                     // Each output is reduced by one
         } // end if
 
-        inorder(cur->left, array, num);
+        inorderAlter(cur->left, array, num);
+    }
+
+    void DeletePostorder(nodeType* cur){
+    
+        if(cur == NULL)
+            return;
+
+        DeletePostorder(cur->left);
+        DeletePostorder(cur->right);
+        delete cur ;
+
     }
 
 
@@ -293,7 +304,6 @@ class AVLtree {         // class of AVLtree
         } // end for
  
     } // display
-
 
 public:
     AVLtree() {             // initialization
@@ -316,7 +326,7 @@ public:
 
         display(root, array) ;
  
-    } // display
+    } // displayMission2
 
     void displayMission3(std::vector<schoolType> array) {
 
@@ -333,11 +343,12 @@ public:
 
         } // end while
 
-        inorder(root, array, num) ;
+        inorderAlter(root, array, num) ;
  
-    } // display
+    } // displayMission3
 
     void clear() {             // initialization
+        DeletePostorder(root) ;
         root = NULL ;
         nodenum = 0 ;
     } // end clear
