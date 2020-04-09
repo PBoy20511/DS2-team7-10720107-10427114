@@ -1,5 +1,5 @@
-//10427114 ºµÆ[¤@ HSIUNG KUAN I ½Ð§U±Ð¤U¸üGitHubª©¥»µû¤À
-//10720107 ³¯¥A¤¤ CHEN PI ZHONG
+//10427114 ç†Šè§€ä¸€ HSIUNG KUAN I è«‹åŠ©æ•™ä¸‹è¼‰GitHubç‰ˆæœ¬è©•åˆ†
+//10720107 é™³ä¸•ä¸­ CHEN PI ZHONG
 
 //*******************************/
 //Heaader file for School List by YH 
@@ -182,7 +182,7 @@ class ClassList{
 	}
 	
 	bool Load( string fileName ) { 
-	// Åª¤J¸ê®Æ
+	// è®€å…¥è³‡æ–™
 	    
     	FILE *infile = NULL ;
     	bool success = false ;
