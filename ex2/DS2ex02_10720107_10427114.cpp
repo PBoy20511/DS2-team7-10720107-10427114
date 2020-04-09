@@ -443,9 +443,9 @@ class Tree{
 	void Insert23TreeEX( CollegeType item ){ // 給一個CollegeType
 	    TreeNode* walk ;
 	    if( Search( item.nameSchool, walk ) ){ // 如果有找到對應節點 
-	    	
+	    	// 在vector裡存入 
 		} // if
-        else{
+        else{ // 找到節點，再放入，如果HowManyItems==3的話就分裂 
         	
 		} // else	
 	} // NEW insert23tree
