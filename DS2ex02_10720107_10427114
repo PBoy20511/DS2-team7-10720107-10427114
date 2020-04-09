@@ -153,152 +153,16 @@ void SchoolList::printFile() {
 
 //************* mission 1 *************//
 
-typedef struct CT {
-	string nameSchool ; // All the content from the school
-	string nameMajor ;
-	string division ;
-	string level ;
-	int numStudent ;
-	int numTeacher ;
-	int numGraduate ; // number of graduates
-	
-	int numOrder ; // whatplace
-} CollegeType ; 
-
-class ClassList{
-		
-	vector< CollegeType > collegeSet ; 
-	
-	
-	public:
-		
-	ClassList(){
-		
-	} // ClassList
-	~ClassList(){
-		ClearList() ;
-	}
-	
-	bool Load( string fileName ) { 
-	// 讀入資料
-	    
-    	FILE *infile = NULL ;
-    	bool success = false ;
-    	fileName = "input" + fileName + ".txt" ;
-    	infile = fopen(fileName.c_str(), "r" ) ;
-
-		if ( infile == NULL )
-			;
-		else{
-      
-        	char tempChar ;
-        	int tempOrder = 1 ;
-        	for ( int i = 0 ; i < 3 ; i++ )
-        		while ( fscanf( infile, "%c", &tempChar ) != EOF && tempChar != '\n' )
-            		;
-
-        	CollegeType aCollege ;
-        	aCollege.nameSchool = "" ;
-        	aCollege.nameMajor = "" ;
-        	aCollege.division = "" ;
-        	aCollege.level = "" ;
-        	aCollege.numStudent = 0 ;
-        	aCollege.numTeacher = 0 ;
-        	aCollege.numGraduate = 0 ;
-        
-			int numTab = 0 ;
-			string stringStudent = "" ;
-			string stringTeacher = "" ;
-			string stringGraduate = "" ;
-		
-        	while ( fscanf( infile, "%c", &tempChar ) != EOF ) {
-        		while ( fscanf( infile, "%c", &tempChar ) != EOF && tempChar != '\n' ) {
-        			if ( tempChar == '\t' )
-        				numTab++ ;
-        			else if ( numTab == 1 )
-        				aCollege.nameSchool = aCollege.nameSchool + tempChar ;
-        			else if ( numTab == 3 )
-        				aCollege.nameMajor = aCollege.nameMajor + tempChar ;
-        			else if ( numTab == 4 )
-        				aCollege.division = aCollege.division + tempChar ;
-        			else if ( numTab == 5 )
-        				aCollege.level = aCollege.level + tempChar ;
-        			else if ( numTab == 6 )
-        				stringStudent = stringStudent + tempChar ;
-        			else if ( numTab == 7 )
-        				stringTeacher = stringTeacher + tempChar ;
-        			else if ( numTab == 8 )
-        				stringGraduate = stringGraduate + tempChar ;
-        		
-        		} //while
-        		
-        		aCollege.numStudent = atoi( stringStudent.c_str() ) ;
-        		aCollege.numTeacher = atoi( stringTeacher.c_str() ) ;
-        		aCollege.numGraduate = atoi( stringGraduate.c_str() ) ;
-        		aCollege.numOrder = tempOrder ;
-        	
-            	collegeSet.push_back( aCollege ) ;
-            
-            	aCollege.nameSchool = "" ;
-	        	aCollege.nameMajor = "" ;
-	        	aCollege.division = "" ;
-	        	aCollege.level = "" ;
-	        	aCollege.numStudent = 0 ;
-	        	aCollege.numTeacher = 0 ;
-	        	aCollege.numGraduate = 0 ;
-	        
-            	stringStudent = "" ;
-            	stringTeacher = "" ;
-            	stringGraduate = "" ;
-            	numTab = 0 ;
-            	tempOrder++ ;
-            
-        	} // while not EOF
-
-        	success = true ;
-        	fclose( infile ) ;
-
-		} // else
-
-		return success ;
-	} // Load function 1 
-	
-	void Print() {
-		for ( int i = 0 ; i < collegeSet.size() ; i++ ) {
-			cout << collegeSet[i].nameSchool << "\t" << collegeSet[i].nameMajor << "\t"
-				 << collegeSet[i].division << "\t" << collegeSet[i].level << "\t" 
-				 << collegeSet[i].numStudent << "\t" << collegeSet[i].numTeacher << "\t"
-				 << collegeSet[i].numGraduate << "\n";
-		} // for
-		
-	} // Print function 2
-	
-	vector< CollegeType > GetSet() {
-		return collegeSet ;
-	} // GetSet function 3
-	
-	void ClearList() {
-	    collegeSet.clear() ;
-	} // ClearList function 4
-	
-	void Remove( CollegeType aCollege ) {
-		for ( int i = 0 ; i < collegeSet.size() ; i++ ) {
-			if ( collegeSet.at( i ).nameSchool == aCollege.nameSchool && collegeSet.at( i ).nameMajor == aCollege.nameMajor 
-				  && collegeSet.at( i ).division == aCollege.division && collegeSet.at( i ).level == aCollege.level )
-				collegeSet.erase( collegeSet.begin() + i ) ;
-		} // for
-	} // Remove function 5 
-	
-};
-
 struct TreeNode{ // store 2-3 Tree's deta
-	vector< CollegeType > small ;
-	vector< CollegeType > big ; // deta
+	vector< CollegeType > itemOne ;
+	vector< CollegeType > itemTwo ; // deta
+	vector< CollegeType > itemTemp ;
 	
 	
 	TreeNode *left ;
 	TreeNode *down ;
 	TreeNode *right ; // pointer
+	TreeNode *tempPointer ; // 
 	
 	TreeNode *parent ; // parent
 };
@@ -321,14 +185,60 @@ class Tree{
 		}
 	} // IsEmpty
 	
-	bool Search( string name ){
-        TreeNode *walk;
-        walk = head ;
+	bool IsItemOneBigger( TreeNode node ){ // find out ids item one bigger
+	    if( node.itemOne[0].nameSchool > node.itemTwo[0].nameSchool ){
+	    	return true ;
+		} // if
+		else{
+			return false ;
+		} // else
+	} // IsIsItemOneBigger
+	
+	bool Search( string name, TreeNode* &walk ){ // find
         while( walk != NULL ){
-        	if( walk.small[0].nameSchool == name ){
-        		return true ;
-			} // if
+        	if( HowManyItems == 1 ){ // if we only need to check itemOne
+        		if( walk->itemOne[0].nameSchool == name ){ // if we find it, set theThing to that item(vector)
+       				return true ;
+				} // if
+				else if( walk->itemOne[0].nameSchool > name ){
+					walk = walk->right ;
+				} // if
+				else if( walk->itemOne[0].nameSchool < name ){
+					walk = walk->left ;
+				} // else if
+			} // if 
+			else{ // if we need to check both item
+        		if( walk->itemOne[0].nameSchool == name ){ // if we find it, set theThing to that item(vector)
+        			return true ;
+				} // if
+				else if( walk->itemTwo[0].nameSchool == name ){ // if we find it, set theThing to that item(vector)
+					return true ;
+				} // else if
+				else if( IsItemOneBigger( walk ) ){ // ItemOne Bigger
+				    if( walk->itemOne[0].nameSchool < name ){
+				    	walk = walk->right ;
+					} // if
+					else if( walk->itemTwo[0].nameSchool > name ){
+						walk = walk->left ;
+					} // else if
+					else{
+						return false ; // means that there's no same name in the node
+					} // else
+				} // if
+				else if( !IsItemOneBigger( walk ) ){ // ItemTwo Bigger
+				    if( walk->itemTwo[0].nameSchool < name ){
+				    	walk = walk->right ;
+					} // if
+					else if( walk->itemOne[0].nameSchool > name ){
+						walk = walk->left ;
+					} // else if
+					else{
+						return false ; // means that there's no same name in the node
+					} // else
+				} // else if
 
+			} // else 
+				
 		} // while
 		
 		return false ;
@@ -337,9 +247,9 @@ class Tree{
 	
 	int HowManyItems( TreeNode *leaf ){ // find out how many item you have
 	
-		if( leaf->small != NULL ){ // the smallest one has item
+		if( leaf->item1 != NULL ){ // the first one has item
 			
-			if( leaf->right != NULL ){ // the biggest one has item 
+			if( leaf->right != NULL ){ // the second one has item 
 				return 2 ;
 				
 			} // if
@@ -360,26 +270,35 @@ class Tree{
 		
 	} // Build23Tree
 	
+	vector<CollegeType> TheSchool( TreeNode node, string name ){ // which item is the item 
+		if( HowManyItems( node ) == 1 ){
+			return node.itemOne ;
+		} // if
+		else{
+	        if( node.itemOne[0].nameSchool == name ){
+	        	return node.itemOne ;
+			} // if
+			else{
+				return node.itemTwo ;
+			} // else
+		} // eise
+		
+	} // TheSchool
+	
 	void Insert23Tree( CollegeType item ){
-        if( Search( item.nameSchool ) ){
-        	CollegeType temp = new CollegeType ;
+		TreeNode* walk = head ;
+        if( Scarch( item.nameSchool, walk ) ){ //if already have School name
         	
 		} // if
 		else{
 			
-		}
+		} // else
 	} // Insert
 	
 	void split( TreeNode leafNode, TreeNode root ){
-		if( leafNode == root ){
-			TreeNode temp = new TreeNode ;
-			temp = leafNode ;
-			
-		} // if
+
 	} // split
 };
-
-
 
 //************* mission 2 *************//
 
