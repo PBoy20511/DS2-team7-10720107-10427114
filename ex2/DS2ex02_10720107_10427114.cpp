@@ -296,13 +296,15 @@ class ClassList{
 struct TreeNode{ // store 2-3 Tree's deta
 	vector< CollegeType > itemOne ;
 	vector< CollegeType > itemTwo ; // deta
+	
 	vector< CollegeType > itemTemp ;
 	
 	
 	TreeNode *left ;
 	TreeNode *down ;
 	TreeNode *right ; // pointer
-	TreeNode *tempPointer ; // 
+	
+	TreeNode *tempPointer ; 
 	
 	TreeNode *parent ; // parent
 };
@@ -410,7 +412,7 @@ class Tree{
 		
 	} // Build23Tree
 	
-	vector<CollegeType> TheSchool( TreeNode node, string name ){ // which item is the item 
+	/*vector<CollegeType> TheSchool( TreeNode node, string name ){ // which item is "the" item I want(used at:if already have School name )
 		if( HowManyItems( node ) == 1 ){
 			return node.itemOne ;
 		} // if
@@ -425,20 +427,33 @@ class Tree{
 		
 	} // TheSchool
 	
-	void Insert23Tree( CollegeType item ){
+    void Insert23Tree( CollegeType item ){
 		TreeNode* walk = head ;
         if( Scarch( item.nameSchool, walk ) ){ //if already have School name
-        	
+        	TheSchool( walk, item.nameSchool )
 		} // if
 		else{
 			
 		} // else
 	} // Insert
+	*/
 	
+
+	
+	void Insert23TreeEX( CollegeType item ){ // 給一個CollegeType
+	    TreeNode* walk ;
+	    if( Search( item.nameSchool, walk ) ){ // 如果有找到對應節點 
+	    	
+		} // if
+        else{
+        	
+		} // else	
+	} // NEW insert23tree
+
 	void split( TreeNode leafNode, TreeNode root ){
 
 	} // split
-};
+}; // tree
 
 
 
