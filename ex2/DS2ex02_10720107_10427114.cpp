@@ -327,8 +327,8 @@ class Tree{
 		}
 	} // IsEmpty
 	
-	bool IsItemOneBigger( TreeNode node ){ // find out ids item one bigger
-	    if( node.itemOne[0].nameSchool > node.itemTwo[0].nameSchool ){
+	bool IsItemOneBigger( TreeNode* node ){ // find out ids item one bigger
+	    if( node.itemOne[0]->nameSchool > node.itemTwo[0]->nameSchool ){
 	    	return true ;
 		} // if
 		else{
@@ -338,7 +338,7 @@ class Tree{
 	
 	bool Search( string name, TreeNode* &walk ){ // find
         while( walk != NULL ){
-        	if( HowManyItems == 1 ){ // if we only need to check itemOne
+        	if( HowManyItems(walk) == 1 ){ // if we only need to check itemOne
         		if( walk->itemOne[0].nameSchool == name ){ // if we find it, set theThing to that item(vector)
        				return true ;
 				} // if
@@ -389,7 +389,7 @@ class Tree{
 	
 	int HowManyItems( TreeNode *leaf ){ // find out how many item you have
 	
-		if( leaf->item1 != NULL ){ // the first one has item
+		if( leaf->itemOne.size() != 0 ){ // the first one has item
 			
 			if( leaf->right != NULL ){ // the second one has item 
 				return 2 ;
@@ -406,8 +406,8 @@ class Tree{
 	} // HowManyItems
 	
 	void Build23Tree( ClassList list ){
-		for ( int i = 0 ; i < collegeSet.size() ; i++ ) {
-          Insert23Tree( list.GetSet()[i] ) ;
+		for ( int i = 0 ; i < list.GetSet.size() ; i++ ) {
+          Insert23TreeEX( list.GetSet()[i] ) ;
 		} // for
 		
 	} // Build23Tree
