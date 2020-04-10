@@ -412,7 +412,7 @@ class Tree{
 		
 	} // Build23Tree
 	
-	/*vector<CollegeType> TheSchool( TreeNode node, string name ){ // which item is "the" item I want(used at:if already have School name )
+	vector<CollegeType> TheOne( TreeNode node, string name ){ // which item is "the" item I want(used at:如果有找到對應節點  )
 		if( HowManyItems( node ) == 1 ){
 			return node.itemOne ;
 		} // if
@@ -425,9 +425,9 @@ class Tree{
 			} // else
 		} // eise
 		
-	} // TheSchool
+	} // TheOne
 	
-    void Insert23Tree( CollegeType item ){
+    /*void Insert23Tree( CollegeType item ){
 		TreeNode* walk = head ;
         if( Scarch( item.nameSchool, walk ) ){ //if already have School name
         	TheSchool( walk, item.nameSchool )
@@ -438,12 +438,12 @@ class Tree{
 	} // Insert
 	*/
 	
-
-	
 	void Insert23TreeEX( CollegeType item ){ // 給一個CollegeType
-	    TreeNode* walk ;
-	    if( Search( item.nameSchool, walk ) ){ // 如果有找到對應節點 
-	    	// 在vector裡存入 
+	    TreeNode* theOne ;
+	    if( Search( item.nameSchool, theOne ) ){ // 如果有找到對應節點 
+	        CollegeType temp ;
+	        temp = item ;
+			TheOne( node, name ).push_back( temp ) ;
 		} // if
         else{ // 找到節點，再放入，如果HowManyItems==3的話就分裂 
         	
