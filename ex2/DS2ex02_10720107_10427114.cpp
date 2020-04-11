@@ -407,7 +407,7 @@ class Tree{
 	
 	void Build23Tree( ClassList list ){
 		for ( int i = 0 ; i < list.GetSet.size() ; i++ ) {
-          Insert23TreeEX( list.GetSet()[i] ) ;
+          Insert23TreeEX( list.GetSet()[i], head ) ;
 		} // for
 		
 	} // Build23Tree
@@ -438,16 +438,23 @@ class Tree{
 	} // Insert
 	*/
 	
-	void Insert23TreeEX( CollegeType item ){ // 給一個CollegeType
-	    TreeNode* theOne ;
-	    if( Search( item.nameSchool, theOne ) ){ // 如果有找到對應節點 
-	        CollegeType temp ;
-	        temp = item ;
-			TheOne( node, name ).push_back( temp ) ;
-		} // if
-        else{ // 找到節點，再放入，如果HowManyItems==3的話就分裂 
-        	
-		} // else	
+	void Insert23TreeEX( CollegeType item, TreeNode* &parent ){ // 給一個CollegeType
+	    if( parent == NULL ){
+	    	// 插入 
+		} // if沒東西 
+		else{
+			if( HowManyItems == 1 ){
+				// 找有沒有名子一樣的vector，有的話放入 
+				// 
+			} // 一筆資料 
+			else if( HowManyItems == 2 ){
+				// 
+			} // 兩筆資料 
+			else{
+				
+			} // 超過了(三筆) 
+		} // else
+	
 	} // NEW insert23tree
 
 	void split( TreeNode leafNode, TreeNode root ){
