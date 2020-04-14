@@ -155,7 +155,7 @@ void SchoolList::printFile() {
 
 
 
-typedef struct CT {
+/*typedef struct CT {
 	string nameSchool ; // All the content from the school
 	string nameMajor ;
 	string division ;
@@ -436,7 +436,7 @@ class Tree{
 			
 		} // else
 	} // Insert
-	*/
+	
 	
 	void Insert23TreeEX( CollegeType item, TreeNode* &parent ){ // 給一個CollegeType
 	    if( parent == NULL ){
@@ -445,7 +445,7 @@ class Tree{
 		else{
 			if( HowManyItems == 1 ){
 				// 找有沒有名子一樣的vector，有的話放入 
-				// 
+				
 			} // 一筆資料 
 			else if( HowManyItems == 2 ){
 				// 
@@ -464,7 +464,7 @@ class Tree{
 
 
 
-//************* mission 2 *************//
+//************* mission 2 *************/
 
 class AVLtree {         // class of AVLtree
 
