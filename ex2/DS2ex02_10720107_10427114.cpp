@@ -1,4 +1,4 @@
-//10427114 熊觀一 HSIUNG KUAN I 請助教下載GitHub版本評分
+//10427114 熊觀一 HSIUNG KUAN I
 //10720107 陳丕中 CHEN PI ZHONG
 
 //*******************************/
@@ -154,7 +154,6 @@ void SchoolList::printFile() {
 //************* mission 1 *************//
 
 
-
 /*typedef struct CT {
 	string nameSchool ; // All the content from the school
 	string nameMajor ;
@@ -166,7 +165,6 @@ void SchoolList::printFile() {
 	
 	int numOrder ; // whatplace
 } CollegeType ; 
-
 class ClassList{
 		
 	vector< CollegeType > collegeSet ; 
@@ -188,7 +186,6 @@ class ClassList{
     	bool success = false ;
     	fileName = "input" + fileName + ".txt" ;
     	infile = fopen(fileName.c_str(), "r" ) ;
-
 		if ( infile == NULL )
 			;
 		else{
@@ -198,7 +195,6 @@ class ClassList{
         	for ( int i = 0 ; i < 3 ; i++ )
         		while ( fscanf( infile, "%c", &tempChar ) != EOF && tempChar != '\n' )
             		;
-
         	CollegeType aCollege ;
         	aCollege.nameSchool = "" ;
         	aCollege.nameMajor = "" ;
@@ -256,12 +252,9 @@ class ClassList{
             	tempOrder++ ;
             
         	} // while not EOF
-
         	success = true ;
         	fclose( infile ) ;
-
 		} // else
-
 		return success ;
 	} // Load function 1 
 	
@@ -292,7 +285,6 @@ class ClassList{
 	} // Remove function 5 
 	
 };
-
 struct TreeNode{ // store 2-3 Tree's deta
 	vector< CollegeType > itemOne ;
 	vector< CollegeType > itemTwo ; // deta
@@ -308,7 +300,6 @@ struct TreeNode{ // store 2-3 Tree's deta
 	
 	TreeNode *parent ; // parent
 };
-
 class Tree{
 	TreeNode *head ;
 	
@@ -378,7 +369,6 @@ class Tree{
 						return false ; // means that there's no same name in the node
 					} // else
 				} // else if
-
 			} // else 
 				
 		} // while
@@ -456,15 +446,11 @@ class Tree{
 		} // else
 	
 	} // NEW insert23tree
-
 	void split( TreeNode leafNode, TreeNode root ){
-
 	} // split
 }; // tree
 
-
-
-//************* mission 2 *************/
+//************* mission 2 *************//
 
 class AVLtree {         // class of AVLtree
 
@@ -571,6 +557,48 @@ class AVLtree {         // class of AVLtree
         root = insertAVL(data_ngrad_idx, data_ngrad, root);
     } // end insertAVL
 
+    void inorderAlter(nodeType* cur, std::vector<schoolType> array, int &num){
+    
+        if(cur == NULL)
+            return;
+
+        inorderAlter(cur->right, array, num);
+        if ( num > 0 ) {
+            display(cur, array) ;
+            num-- ;                     // Each output is reduced by one
+        } // end if
+
+        inorderAlter(cur->left, array, num);
+    }
+
+    void DeletePostorder(nodeType* cur){
+    
+        if(cur == NULL)
+            return;
+
+        DeletePostorder(cur->left);
+        DeletePostorder(cur->right);
+        delete cur ;
+
+    }
+
+
+   void display(nodeType* cur, std::vector<schoolType> array) {
+
+        for (int i = 0 ; i < cur->data_ngrad_idx.size() ; i++ ) {  // all data in cur
+            for ( int j = 0 ; j < array.size() ; j++ ) {
+                
+                if ( cur->data_ngrad_idx[i] == j + 1 ) {
+                    cout << i + 1 << ": [" << j + 1 << "] " << array[j].sname << ", " ;
+                    cout << array[j].dname << ", " << array[j].type <<  ", " ;
+                    cout << array[j].level << ", " << array[j].ngrad << endl ;
+                } // end if
+
+            } // for
+        } // end for
+ 
+    } // display
+
 public:
     AVLtree() {             // initialization
         root = NULL ;
@@ -585,26 +613,36 @@ public:
 
     } // end creatAVLtree
 
-    void display(std::vector<schoolType> array) {
+    void displayMission2(std::vector<schoolType> array) {
         
         cout << "Tree height = " << root->height + 1 << endl ;      // Tree height  Q: I don't know why always DEMO height - 1
         cout << "Number of nodes = " << nodenum << endl ;       // Number of nodes
 
-        for (int i = 0 ; i < root->data_ngrad_idx.size() ; i++ ) {  // all data in root
-            for ( int j = 0 ; j < array.size() ; j++ ) {
-                
-                if ( root->data_ngrad_idx[i] == j + 1 ) {
-                    cout << i + 1 << ": [" << j + 1 << "] " << array[j].sname << ", " ;
-                    cout << array[j].dname << ", " << array[j].type <<  ", " ;
-                    cout << array[j].level << ", " << array[j].ngrad << endl ;
-                } // end if
-
-            } // for
-        } // end for
+        display(root, array) ;
  
-    } // display
+    } // displayMission2
+
+    void displayMission3(std::vector<schoolType> array) {
+
+        int num = 0 ;
+        bool text = true ;
+
+        while ( text ) {
+            cout << "Key the num K : " ;
+            cin >> num ;
+
+            if ( num > 0 )
+                text = false ;
+            else cout << "Wrong input! ";
+
+        } // end while
+
+        inorderAlter(root, array, num) ;
+ 
+    } // displayMission3
 
     void clear() {             // initialization
+        DeletePostorder(root) ;
         root = NULL ;
         nodenum = 0 ;
     } // end clear
@@ -615,10 +653,10 @@ public:
 
 void msg1() {
 
-    cout << "massage 1 please key 1" << endl ;
-    cout << "massage 2 please key 2" << endl ;
-    cout << "other key will end program" << endl << endl ;
-    cout << "(1/2/end): " ;
+    cout << "Mission 1 please key 1" << endl ;
+    cout << "Mission 2 please key 2" << endl ;
+    cout << "Mission 3 please key 3" << endl ;
+    cout << "(1/2/3/end): " ;
 
 } // end msg1
 
@@ -627,7 +665,6 @@ void msg2() {
     cout << "program will end! " << endl ;
 
 } // end msg1
-
 
 int main() {
 
@@ -648,9 +685,18 @@ int main() {
                 // not yet
             } // end if
             else if ( orderkey == "2" ) {       // mission 2
-				Misson2.creatAVLtree(ListR.getFile()) ;
-                Misson2.display(ListR.getFile()) ;
+
                 Misson2.clear() ;
+				Misson2.creatAVLtree(ListR.getFile()) ;
+                Misson2.displayMission2(ListR.getFile()) ;
+
+            } // end elseif
+            else if ( orderkey == "3" ) {    // mission 3
+
+                Misson2.clear() ;
+                Misson2.creatAVLtree(ListR.getFile()) ;
+                Misson2.displayMission3(ListR.getFile()) ;
+                
             } // end elseif
             else { msg2(); text = false ; }     //end the Loop
         
