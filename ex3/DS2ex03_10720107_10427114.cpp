@@ -140,152 +140,21 @@ class List{
 	} // readBinary
 
 	
-	
 	vector<StudentType> GetSet(){
 		return studentSetZ ;
 	} // GetSet
 	
-	bool Load( string fileName ) {  // This is all wrong
-	// 讀入資料
-	 
-    	FILE *infile = NULL ;
-    	bool success = false ;
-    	fileName = "input" + fileName + ".bin" ;
-    	infile = fopen(fileName.c_str(), "r" ) ;
 
-		if ( infile == NULL )
-			;
-		else{
-
-        	char tempChar ;
-        	for ( int i = 0 ; i < 3 ; i++ )
-        		while ( fscanf( infile, "%c", &tempChar ) != EOF && tempChar != '\n' )
-            		;
-
-        	StudentTypeHZ aStudent ; // reset
-        	/*aStudent.hValue = 0 ;*/
-        	aStudent.sid = "" ;
-        	aStudent.sname = "" ;
-        	aStudent.score = "" ;
-        	aStudent.mean ;
-        
-			int numTab = 0 ; // Build Temp that will be use later 
-			string strid = "" ;
-			string strsname = "" ;
-			string strscore = "" ;
-			string strmean = "" ;
-		
-        	while ( fscanf( infile, "%c", &tempChar ) != EOF ) { // ReadFile
-        	
-        		while ( fscanf( infile, "%c", &tempChar ) != EOF && tempChar != '\n' ) { // Read a line
-        			if ( tempChar == '\t' )
-        				numTab++ ;
-        			else if ( numTab == 0 )
-        				strid = strid + tempChar ;
-        			else if ( numTab == 1 )
-        				strsname = strsname + tempChar ;
-        			else if ( numTab == 2 )
-        				strscore = strscore + tempChar ;
-        			else if ( numTab == 8 )
-        			    strmean = strmean + tempChar ;
-        		
-        		} //while
-        		
-        		aStudent.sid = strid;
-        		aStudent.sname = strsname ;
-        		aStudent.score = strscore ;
-        		aStudent.mean = strmean ;
-        	
-            	//studentSetZ.push_back( aStudent ) ;
-            
-            	aStudent.sid = "" ;
-            	aStudent.sname = "" ;
-        	    aStudent.score = "" ;
-            	aStudent.mean ;
-	        
-            	strid = "" ;
-            	strscore = "" ;
-            	strsname = "" ;
-            	strmean = "" ;
-            	numTab = 0 ;
-            
-        	} // while not EOF
-
-        	success = true ;
-        	fclose( infile ) ;
-
-		} // else
-
-		return success ;
-	} // Load function 1 
 	
 };
 
-
-
-/*bool List::Load( string fileName ) {
-    // Load a file, turn it into a vector
-    
-    fileNum = fileName ;
-    FILE *infile = NULL ;
-    bool success = false ;
-    fileName = "input" + fileName + ".txt" ;
-    infile = fopen(fileName.c_str(), "r" ) ;
-
-	if ( infile == NULL )
-		;
-	else{
-
-        char tempChar ;
-        
-        for ( int i = 0 ; i < 3 ; i++ )
-        	while ( fscanf( infile, "%c", &tempChar ) != EOF && tempChar != '\n' )
-            	;
-
-        StudentTypeH aStudent ;
-        aStudent.sid = {'0'} ;
-        aCollege.content = "" ; // reset
-        
-		int numTab = 0 ; // what number is up
-		string numId = "" ;
-		
-		while ( fscanf( infile, "%c", &tempChar ) != EOF ) {
-			
-
-			while(fscanf( infile, "%c", &tempChar ) != EOF && tempChar != '\n' ){
-				for( int i = 0 ; tempChar != '\t' ; i++ ){
-			    	aStudent.sid[0] = tempChar ;
-			    } // while	
-				
-				aStudent.content = aStudent.content + tempChar ;		
-			} // while
-			
-			aStudent.sid = atoc( numId.c_str() ) ;
-			studentSet.push_back( aStudent ) ;
-			
-			aStudent.content = 0 ;
-			aStudent.sid = 0 ;
-		
-	    } // while
-		
-
-        success = true ;
-        fclose( infile ) ;
-
-	} // else
-
-	return success ;
-
-} // Load
-
-*/
 
 //************************************************************************************
 
 class HashList{
 	
-	int hashSize ;
-	int detaSize ;
+	int hashSize ; // 之後方便建array 
+	int detaSize ; // 共有多少資料 
 	float nonExistNum ; // 不存在值 
 	float existNum ; // 現存值 
 	StudentType *hashList ;
@@ -310,7 +179,7 @@ class HashList{
 			return false ;
 		} // if
 		else{
-			for( int i = 0; i < num; i++ ){
+			for( int i = 1; i < num; i++ ){
 				if( num%i == 0 ){
 					return false ;
 				} // if
@@ -333,17 +202,23 @@ class HashList{
 	    	
 	    	hashSize = alist.GetSet().size() ; // Build the array based on hashSize( bigger than 1.2 & is prime ) 
 	    	detaSize = hashSize ;
-	    	hashSize = hashSize * 1.2 ;
+	    	hashSize = hashSize * 13 ;
+	    	hashSize = hashSize / 10 ;
+	    	//cout << hashSize << "\n" ;
+	    	
+	    	
 	    	while( IsPrime( hashSize ) ){
 	    		hashSize++ ;
 			} // while
+
+            cout << hashSize << "\n" ;
 	    	hashList = new StudentType[hashSize] ;
 	    	
 	    	for( int i = 0 ; i < alist.GetSet().size() ; i++ ){ // Insert the deta one by one
 	    		HashInsert( alist.GetSet()[i], hashList ) ;
 			} // for
 			
-			
+			PrintOutFile(fileName) ;
 			Print() ;
 			return true ;
 	    	
@@ -397,22 +272,7 @@ class HashList{
 		
 		return keynum ;
 	} // InvertToKey
-	
-	int InvertToKeyZ( string sid ){ // Change student id into the key value we want
-        int keyNum = 1;
-        char * temp = new char[sid.length()+1] ;
-        strcpy(temp, sid.c_str()) ;
-        
-        int size = sid.length()+1 ;
-        
-        for( int i = 0 ; i < size ; i++ ){
-            keyNum = keyNum * temp[i] ; 	
-		
-		} // for
-		
-		return keyNum ;
-		
-	} // InvertToKey
+
 	
 	bool SpotEmpty( int spot, StudentType* hashList ){ // Find Out is that spot empty
 		if( hashList[spot].hValue == 0 ){
@@ -424,13 +284,25 @@ class HashList{
 	} // SpotEmpty
 		
 
-    void PrintOutFile(){
+    void PrintOutFile( string fileName ){
+    	fstream  outFile ;
+    	fileName = "linear" + fileName + ".txt" ;
+    	outFile.open(fileName.c_str(), ios::out | ios::trunc);
+    	
+    	for( int j = 0 ; j < hashSize ; j++ ){
+    		outFile.write(hashList[j].sid, 10) ;
+    		outFile.write(hashList[j].sname, 10) ;
+    		
+    		
+		} // wfor
+    	
+    	outFile.write(hashList[0].sid, 10) ;
     	
 	} // Print
 	
 	void Print(){
-		float numNE = 0.0000 ;
-        float numE = 0.0000 ;
+		float numNE = 0.0 ;
+        float numE = 0.0 ;
         float detaSizef = (float) detaSize ;
         float hashSizef = (float) hashSize ;
         
@@ -479,6 +351,7 @@ int main(){
 		
     } // while  
 } // main()
+
 
 
 
