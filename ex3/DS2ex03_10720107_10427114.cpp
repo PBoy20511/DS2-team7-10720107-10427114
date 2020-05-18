@@ -1,4 +1,4 @@
-// 10720107 ³¯¥A¤¤ 10427114 ºµÆ[¤@  ½Ð§U±Ð¤U¸üGitHubª©¥»µû¤À
+// 10720107 é™³ä¸•ä¸­ 10427114 ç†Šè§€ä¸€  è«‹åŠ©æ•™ä¸‹è¼‰GitHubç‰ˆæœ¬è©•åˆ†
 
 #include<iostream> 
 #include<cstdio>
@@ -121,7 +121,7 @@ class List{
 	} // GetSet
 	
 	bool LoadZ( string fileName ) { 
-	// Åª¤J¸ê®Æ
+	// è®€å…¥è³‡æ–™
 	 
     	FILE *infile = NULL ;
     	bool success = false ;
