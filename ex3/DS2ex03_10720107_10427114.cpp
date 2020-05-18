@@ -113,14 +113,14 @@ class List{
 	    }
 	
 	
-	bool Load( string fileName );
+
 	
 	
 	vector<StudentTypeHZ> GetSet(){
 		return studentSetZ ;
 	} // GetSet
 	
-	bool LoadZ( string fileName ) { 
+	bool Load( string fileName ) { 
 	// 讀入資料
 	 
     	FILE *infile = NULL ;
@@ -258,10 +258,11 @@ class List{
 //************************************************************************************
 
 class HashList{
+	
 	int hashSize ;
 	int detaSize ;
-	float nonExistNum ;
-	float existNum ;
+	float nonExistNum ; // 不存在值 
+	float existNum ; // 現存值 
 	StudentTypeHZ *hashList ;
 	
 
@@ -279,7 +280,7 @@ class HashList{
 		
 	}
 	
-	bool IsPrime( int num ){
+	bool IsPrime( int num ){ // Check if the num is a prime
 		if( num == 1 ){
 			return false ;
 		} // if
@@ -298,6 +299,8 @@ class HashList{
 	bool BuildTable(){ // if there's a .bin file, return true 
 	    List list ;
 	    string fileName ;
+	    cout << " Enter Bin fileName : \n" ;
+	    cin >> fileName ;
 	    
 	    if( list.Load(fileName) ){
 	    	
@@ -314,7 +317,7 @@ class HashList{
 			} // for
 			
 			
-			
+			Print() ;
 			return true ;
 	    	
 		} // if
@@ -373,7 +376,7 @@ class HashList{
 		} // else
 		
 	
-		bool insert = false ;
+		bool insert = false ; // If first Time Insert success, bool = true 
 		
 		if( SpotEmpty( aStudent.hValue, hashList ) ){ // First Time Insert
 			hashList[aStudent.hValue] = aStudent ;
@@ -393,7 +396,7 @@ class HashList{
 	} // HashInsert
 		
 
-    void PrintFile(){
+    void PrintOutFile(){
     	
 	} // Print
 	
@@ -406,8 +409,8 @@ class HashList{
         numNE = nonExistNum / hashSizef ;
         numE = existNum / detaSizef ;
         
-        cout << "unsuccessful search: "<< numNE << "comparisons on averge" ;
-        cout << "successful search: "<< numE << "comparisons on averge" ;
+        cout << "unsuccessful search: "<< numNE << " comparisons on averge\n" ;
+        cout << "successful search: "<< numE << " comparisons on averge\n" ;
         
         
 	} //Print
@@ -448,6 +451,13 @@ int main(){
 		
     } // while  
 } // main()
+
+
+
+
+
+
+
 
 
 
