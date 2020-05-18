@@ -16,8 +16,23 @@ typedef struct ST{
 	char sname[10] ; // student name
 	unsigned char score[6] ; 
 	float mean ;
+	int hValue ;
 } StudentType;
 
+
+typedef struct STH{ // StudentType Hash
+	char sid[10] ;
+	string content ;
+	int hValue ;
+}StudentTypeH;
+
+typedef struct STHZ{ // Ver.2 of StudentType Hash
+	int hValue ;
+	string sid ;
+	string sname ;
+	string score ;
+	string mean ;
+}StudentTypeHZ;
 
 int TextToBinary(string fileName){
 	fstream inFile, outFile;
@@ -78,28 +93,11 @@ int TextToBinary(string fileName){
 	inFile.close();
 	return stNo;
 }
-
-typedef struct STH{ // StudentType Hash
-	char sid[10] ;
-	string content ;
-	int hValue ;
-}StudentTypeH;
-
-typedef struct STHZ{ // Ver.2 of StudentType Hash
-	int hValue ;
-	string sid ;
-	string sname ;
-	string score ;
-	string mean ;
-}StudentTypeHZ;
-
-
-
 //*********************************8*******************************
 
 class List{
 	
-	vector<StudentTypeHZ> studentSetZ ;
+	vector<StudentType> studentSetZ ;
 	/*vector<StudentTypeH> studentSet ;*/
 	string fileNum ;
 	
@@ -112,15 +110,42 @@ class List{
 		
 	    }
 	
-	
+	bool readBinary(string fileName){
+		fstream binFile ;
+		StudentType oneSt ;
+		int stNo = 0 ;
+		fileName = "input" + fileName + ".bin" ;
+		
+		binFile.open(fileName.c_str(), fstream::in | fstream::binary );
+		if( binFile.is_open()){
+			binFile.seekg(0, binFile.end) ;
+			stNo = binFile.tellg()/sizeof(oneSt) ;
+			binFile.seekg(0, binFile.beg) ;
+			for(int i = 0; i < stNo; i++ ){
+				binFile.read((char*)&oneSt, sizeof(oneSt));
+				studentSetZ.push_back(oneSt);
+				// cout << "[" << i+1 << "]" << studentSetZ[i].sid << "," << oneSt.sname << endl ;
+			} // for
+			
+		    binFile.close() ;
+		    return true ;
+		} // if
+		else{
+			binFile.close();
+			return false ;
+		} // else
+		
+
+		
+	} // readBinary
 
 	
 	
-	vector<StudentTypeHZ> GetSet(){
+	vector<StudentType> GetSet(){
 		return studentSetZ ;
 	} // GetSet
 	
-	bool Load( string fileName ) { 
+	bool Load( string fileName ) {  // This is all wrong
 	// 讀入資料
 	 
     	FILE *infile = NULL ;
@@ -171,7 +196,7 @@ class List{
         		aStudent.score = strscore ;
         		aStudent.mean = strmean ;
         	
-            	studentSetZ.push_back( aStudent ) ;
+            	//studentSetZ.push_back( aStudent ) ;
             
             	aStudent.sid = "" ;
             	aStudent.sname = "" ;
@@ -263,7 +288,7 @@ class HashList{
 	int detaSize ;
 	float nonExistNum ; // 不存在值 
 	float existNum ; // 現存值 
-	StudentTypeHZ *hashList ;
+	StudentType *hashList ;
 	
 
 	
@@ -297,23 +322,25 @@ class HashList{
 	} // IsPrime
 		
 	bool BuildTable(){ // if there's a .bin file, return true 
-	    List list ;
+	    List alist ;
 	    string fileName ;
-	    cout << " Enter Bin fileName : \n" ;
+	    cout << "Enter Bin fileName : \n" ;
 	    cin >> fileName ;
 	    
-	    if( list.Load(fileName) ){
+	    
+	    
+	    if( alist.readBinary(fileName) ){
 	    	
-	    	hashSize = list.GetSet().size() ; // Build the array based on hashSize( bigger than 1.2 & is prime ) 
+	    	hashSize = alist.GetSet().size() ; // Build the array based on hashSize( bigger than 1.2 & is prime ) 
 	    	detaSize = hashSize ;
 	    	hashSize = hashSize * 1.2 ;
 	    	while( IsPrime( hashSize ) ){
 	    		hashSize++ ;
 			} // while
-	    	hashList = new StudentTypeHZ[hashSize] ;
+	    	hashList = new StudentType[hashSize] ;
 	    	
-	    	for( int i = 0 ; i < list.GetSet().size() ; i++ ){ // Insert the deta one by one
-	    		HashInsert( list.GetSet()[i], hashList ) ;
+	    	for( int i = 0 ; i < alist.GetSet().size() ; i++ ){ // Insert the deta one by one
+	    		HashInsert( alist.GetSet()[i], hashList ) ;
 			} // for
 			
 			
@@ -326,6 +353,38 @@ class HashList{
 		} // else
 		
 	} // BulidList
+
+	
+	void HashInsert( StudentType aStudent, StudentType* hashList ){ // Hash Insert
+		aStudent.hValue = InvertToKey( aStudent.sid ) ; // Set hValue
+		
+		if( aStudent.hValue > hashSize ){ // Set exsiyNum & NonExistNum
+			aStudent.hValue = aStudent.hValue % hashSize ;
+			nonExistNum++ ;
+		} // if
+		else{
+			existNum ++ ;
+		} // else
+		
+	
+		bool insert = false ; // If first Time Insert success, bool = true 
+		
+		if( SpotEmpty( aStudent.hValue, hashList ) ){ // First Time Insert
+			hashList[aStudent.hValue] = aStudent ;
+			insert = true ;
+		} // if
+		
+		while( !insert ){ // Not Virgin
+
+			if( SpotEmpty( aStudent.hValue, hashList ) ){
+				hashList[aStudent.hValue] = aStudent ;
+				insert = true ;
+			} // if
+		    
+		    aStudent.hValue++ ;
+		} // while
+		
+	} // HashInsert
 	
 	int InvertToKey( char sid[10] ){ // Change student id into the key value we want
 		int keynum = 0; 
@@ -355,7 +414,7 @@ class HashList{
 		
 	} // InvertToKey
 	
-	bool SpotEmpty( int spot, StudentTypeHZ* hashList ){ // Find Out is that spot empty
+	bool SpotEmpty( int spot, StudentType* hashList ){ // Find Out is that spot empty
 		if( hashList[spot].hValue == 0 ){
 			return false ;
 		} // if
@@ -363,37 +422,6 @@ class HashList{
 			return true ;
 		} // else
 	} // SpotEmpty
-	
-	void HashInsert( StudentTypeHZ aStudent, StudentTypeHZ* hashList ){ // Hash Insert
-		aStudent.hValue = InvertToKeyZ( aStudent.sid ) ; // Set hValue
-		
-		if( aStudent.hValue > hashSize ){ // Set exsiyNum & NonExistNum
-			aStudent.hValue = aStudent.hValue % hashSize ;
-			nonExistNum++ ;
-		} // if
-		else{
-			existNum ++ ;
-		} // else
-		
-	
-		bool insert = false ; // If first Time Insert success, bool = true 
-		
-		if( SpotEmpty( aStudent.hValue, hashList ) ){ // First Time Insert
-			hashList[aStudent.hValue] = aStudent ;
-			insert = true ;
-		} // if
-		
-		while( !insert ){ // Not Virgin
-
-			if( SpotEmpty( aStudent.hValue, hashList ) ){
-				hashList[aStudent.hValue] = aStudent ;
-				insert = true ;
-			} // if
-		    
-		    aStudent.hValue++ ;
-		} // while
-		
-	} // HashInsert
 		
 
     void PrintOutFile(){
@@ -422,7 +450,7 @@ class HashList{
 int main(){
 	int cmd ;
 	string fileName ;
-	HashList hash ;
+	HashList hList;
 	
 	bool haveBin = false ;
 	cout << "Enter CMD:(0)Quit (1)Text to Binary (2)Linear Search \n" ;
@@ -434,7 +462,7 @@ int main(){
             haveBin = true ;
 		} // if
 		else if( cmd == 2 ){
-			if( hash.BuildTable() ){
+			if( hList.BuildTable() ){
 			    ;
 			} // if
 			else{
@@ -451,6 +479,14 @@ int main(){
 		
     } // while  
 } // main()
+
+
+
+
+
+
+
+
 
 
 
