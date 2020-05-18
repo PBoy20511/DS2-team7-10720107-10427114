@@ -295,7 +295,7 @@ class HashList{
 		
 	} // IsPrime
 		
-	bool BulidTable(){ // if there's a .bin file, return true 
+	bool BuildTable(){ // if there's a .bin file, return true 
 	    List list ;
 	    string fileName ;
 	    
