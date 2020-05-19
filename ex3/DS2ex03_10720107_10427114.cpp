@@ -166,8 +166,8 @@ class HashList{
 	HashList(){
 		hashSize = 0 ;
 		detaSize = 0 ;
-		nonExistNum = 0.0000 ;
-		existNum = 0.0000 ;
+		nonExistNum = 0.0 ;
+		existNum = 0.0 ;
 	}
 	
 	~HashList(){
@@ -218,6 +218,7 @@ class HashList{
 	    		HashInsert( alist.GetSet()[i], hashList ) ;
 			} // for
 			
+			// cout << nonExistNum << " " << existNum << "\n";
 			PrintOutFile(fileName) ;
 			Print() ;
 			return true ;
@@ -231,7 +232,10 @@ class HashList{
 
 	
 	void HashInsert( StudentType aStudent, StudentType* hashList ){ // Hash Insert
+	    //cout << aStudent.sid << "\n" ;
+	    
 		aStudent.hValue = InvertToKey( aStudent.sid ) ; // Set hValue
+		// cout << aStudent.hValue << "\n" ;
 		
 		if( aStudent.hValue > hashSize ){ // Set exsiyNum & NonExistNum
 			aStudent.hValue = aStudent.hValue % hashSize ;
@@ -262,7 +266,7 @@ class HashList{
 	} // HashInsert
 	
 	int InvertToKey( char sid[10] ){ // Change student id into the key value we want
-		int keynum = 0; 
+		int keynum = 1; 
 		int temp = 0;
 		
 		for( int i = 0; i < 10 ; i++ ){ // that temp equals to the value of sid's char, and mutiply by keynum
@@ -309,8 +313,8 @@ class HashList{
         numNE = nonExistNum / hashSizef ;
         numE = existNum / detaSizef ;
         
-        cout << "unsuccessful search: "<< numNE << " comparisons on averge\n" ;
-        cout << "successful search: "<< numE << " comparisons on averge\n" ;
+        cout << "unsuccessful search: "<< setprecision(4) << numNE << " comparisons on averge\n" ;
+        cout << "successful search: "<< setprecision(4) << numE << " comparisons on averge\n" ;
         
         
 	} //Print
@@ -351,6 +355,8 @@ int main(){
 		
     } // while  
 } // main()
+
+
 
 
 
