@@ -8,6 +8,7 @@
 #include<cstring>
 #include<iomanip>
 #include<fstream>
+#include <sstream>
 
 using namespace std ;
 
@@ -286,6 +287,8 @@ class HashList{
 			return true ;
 		} // else
 	} // SpotEmpty
+	
+	
 		
 
     void PrintOutFile( string fileName ){
@@ -297,7 +300,18 @@ class HashList{
     		outFile.write(hashList[j].sid, 10) ;
     		outFile.write(hashList[j].sname, 10) ;
     		
+            stringstream meanStr ;
+            meanStr << hashList[j].mean ;
+            string temp_str = meanStr.str() ;
+            char* meanChar = (char*) temp_str.c_str() ;
+            outFile.write(meanChar, temp_str.length()+1 ) ;
     		
+    		stringstream hVStr ;
+            hVStr << hashList[j].hValue ;
+            string tempHstr = hVStr.str() ;
+            char* hVChar = (char*) tempHstr.c_str() ;
+            outFile.write(meanChar, tempHstr.length()+1 ) ;
+
 		} // wfor
     	
     	outFile.write(hashList[0].sid, 10) ;
@@ -346,6 +360,9 @@ int main(){
 			} // else
 			
 		} // else if
+		else if( cmd == 3 ){
+		    // 10427114
+		} // else if
         else{
         	cout << "No Such Cmd!" ;
 		} // else
@@ -355,25 +372,6 @@ int main(){
 		
     } // while  
 } // main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
