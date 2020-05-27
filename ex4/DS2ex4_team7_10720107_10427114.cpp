@@ -13,6 +13,8 @@
 
 using namespace std ;
 
+
+
 class Graph{
 	
 	typedef struct sP{ // student pair
@@ -40,10 +42,11 @@ class Graph{
 	
 	bool ReadFile( vector<StudentPair> &fileList ) ; // get all records from a file
 	void Insert( adjList &aAdj ); // insert an adj list
-	int Locate( vector<adjList> &list, string &key ) ; // locate the index in adj List
-	int Locate( string key ) {
-		return locate( adjL, key ) ;
-	} // Locate
+	
+	//int Locate( vector<adjList> &list, string &key ) ; // locate the index in adj List
+	//int Locate( string key ) {
+	//	return locate( adjL, key ) ;
+	//} // Locate
 	
 	bool AddCount( adjListNode*nodeOne, adjListNode*nodeTwo ) ; // count only if not visited yet
 	void SavelNF( vector<adjList> &list, string key ) ; // write influence values as a file
@@ -63,6 +66,34 @@ class Graph{
 		/*void SetLB( float v ){ // set up the velue of wgtLB
 			wgtLB = v ;
 		} // SetLB */
+		
+		bool readBinary(string fileName){
+			fstream binFile ;
+			StudentPair oneSt ;
+			int stNo = 0 ;
+			fileName = "input" + fileName + ".bin" ;
+		
+			binFile.open(fileName.c_str(), fstream::in | fstream::binary );
+			if( binFile.is_open()){
+				binFile.seekg(0, binFile.end) ;
+				stNo = binFile.tellg()/sizeof(oneSt) ;
+				binFile.seekg(0, binFile.beg) ;
+				for(int i = 0; i < stNo; i++ ){
+					binFile.read((char*)&oneSt, sizeof(oneSt));
+					studentSetZ.push_back(oneSt);
+					// cout << "[" << i+1 << "]" << studentSetZ[i].sid << "," << oneSt.sname << endl ;
+				} // for
+				
+			    binFile.close() ;
+			    return true ;
+			} // if
+			else{
+				binFile.close();
+				return false ;
+			} // else
+		
+		} // readBinary
+		
 	    adjList *FoundNode( string strId ){ // Use Binary Search to find the node we're lookinf for
 
 	    	int ans = BinarySearch( 0, adjL.size(), strId ) ; // Start to find
@@ -125,7 +156,27 @@ class Graph{
 			
 		} // BinaryInsert
 		
-		void InsertALN( adjListNode temp ){
+		void InsertALN( adjList *&list, adjListNode &node ){ // Insert an adjListNode into an adjList
+        // if i wanna rise up the speed, i should use binary search
+        
+			adjListNode *walk ; 
+			walk = list->head ;
+			bool insert = false ;
+			do{	// find the spot i wanna insert
+				walk->next = walk ;
+				if( walk->next->sid2 < node.sid2 && walk->sid2 > node.sid2 ){
+					insert = true ;
+				} // if		
+			} while( !insert && walk->next != NULL )
+			
+			if( insert ){ // if the node isn't the last one
+				node.next = walk->next ;
+				walk->next = node ;
+			} // if
+			else{ // if it is the last node on the list
+				walk->next - node ;
+				node.next = NULL ;
+			} // else
 			
 		} // InsertALN
 		
@@ -163,7 +214,7 @@ bool Graph::Create(){
             	Insert( aAdj ) ;
 			} // if
 			else{ // the node does exist
-
+               InsertALN( walk, temp ) ; // Insert temp into the right spot
 			} // else
             
 		} // for
@@ -192,8 +243,9 @@ void Graph::Insert( adjList &aAdj ) { // Insert the node to the right place
 
 
 
-
-
+int main(){
+	
+} // main()
 
 
 
