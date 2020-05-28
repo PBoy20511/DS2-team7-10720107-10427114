@@ -109,8 +109,8 @@ class Graph{
 	    	
 		} // FoundNode()*/
 		
-		int Locate( string fileName ){
-			int ans = BinarySearch(0, adjL.size()-1 , strId ) ; // Start to find
+		int Locate( string strId ){
+			int ans = BinarySearch(0, adjL.size()-1 , strId.c_str( )) ; // Start to find
 			
 			return ans ;
 		} // Locate
@@ -120,10 +120,10 @@ class Graph{
 			if( last > 0 ){
 				
 				int mid = first + (last - 1) / 2 ;
-				if( strcmp( strId.c_str(), adjL[mid] ) == 0 ){ // Find the one
+				if( strcmp( strId.c_str(), adjL[mid].sid1.c_str() ) == 0 ){ // Find the one
 					return mid ;
 				} // if
-				else if( strcmp( strId.c_str(), adjL[mid] ) < 0 ){
+				else if( strcmp( strId.c_str(), adjL[mid].sid1.c_str() ) < 0 ){
 					return BinarySearch( first, mid-1, strId );
 				} // else if
 				else{
@@ -137,8 +137,8 @@ class Graph{
 			
 		} // BinarySearch
 		
-        int BinaryInsert( int first, int size, string sid1 ){
-        	if( strcmp( strId, adjL[0]) < 0 ){
+        int BinaryInsert( int first, int size, string strId ){
+        	if( strcmp( strId.c_str(), adjL[0].sid1.c_str()) < 0 ){
         		return -2 ;
 			} // if
 			else{
@@ -146,10 +146,10 @@ class Graph{
 				
 					int mid = (first + size) / 2 ;
 				
-					if( strcmp( strId, adjL[mid] ) < 0 && strcmp( strId, adjL[mid-1] ) > 0 ){ // Find the one
+					if( strcmp( strId.c_str(), adjL[mid].sid1.c_str() ) < 0 && strcmp( strId.c_str(), adjL[mid-1].sid1.c_str() ) > 0 ){ // Find the one
 						return mid ;
 					} // if
-					else if( strcmp( strId, adjL[mid] ) < 0 ){
+					else if( strcmp( strId.c_str(), adjL[mid].sid1.c_str() ) < 0 ){
 						return BinarySearch( first, mid-1, strId );
 					} // else if
 				    else{
@@ -164,7 +164,7 @@ class Graph{
 			
 		} // BinaryInsert
 		
-		void InsertALN( adjList *&list, adjListNode &node ){ // Insert an adjListNode into an adjList
+		void InsertALN( adjList *&list, adjListNode *&node ){ // Insert an adjListNode into an adjList
         // if i wanna rise up the speed, i should use binary search
         
 			adjListNode *walk ; 
@@ -172,18 +172,18 @@ class Graph{
 			bool insert = false ;
 			do{	// find the spot i wanna insert
 				walk->next = walk ;
-				if( walk->next->sid2 < node.sid2 && walk->sid2 > node.sid2 ){
+				if( walk->next->sid2 < node->sid2 && walk->sid2 > node->sid2 ){
 					insert = true ;
 				} // if		
-			} while( !insert && walk->next != NULL )
+			} while( !insert && walk->next != NULL );
 			
 			if( insert ){ // if the node isn't the last one
-				node.next = walk->next ;
+				node->next = walk->next ;
 				walk->next = node ;
 			} // if
 			else{ // if it is the last node on the list
-				walk->next - node ;
-				node.next = NULL ;
+				walk->next = node ;
+				node->next = NULL ;
 			} // else
 			
 		} // InsertALN
@@ -194,15 +194,15 @@ class Graph{
 	    // void compINF() ; // compute influnce values by DFS
 		
 			
-	    bool Create(); // read pairs from a file into adjacency list
+	    bool Create( string fileName); // read pairs from a file into adjacency list
 	    void SaveF() ; // write adjacency lists as a file
 	    
-	    void clearUp(){
+	    /*void clearUp(){
 	    	clearUp(adjL);
-		} // ClearUp
+		} // ClearUp*/
 		
 		~Graph(){
-			clearUp() ;
+			
 		} // destructor
 	
 };
@@ -213,11 +213,11 @@ bool Graph::Create( string fileName ){
 	
 	if( ReadFileByP( fileList, fileName ) ){
         for( int i = 0 ; i < fileList.size() ; i++ ){
-        	strcpy( aAdj.sid.c_str() ,fileList[i].sid1 ) ; // save sender
+        	strcpy( aAdj.sid1.c_str() ,fileList[i].sid1.c_str() ) ; // save sender
         	
-        	adjListNode temp ;
-        	strcpy(temp.sid2.c_str(), fileList[i].sid2 ) ; // save receiver
-        	temp.weight = fileList[i].wgt ;
+        	adjListNode *temp = new adjListNode ;
+        	strcpy(temp->sid2.c_str(), fileList[i].sid2 ) ; // save receiver
+        	temp->weight = fileList[i].wgt ;
         	
             int spot = Locate(fileName) ;// Check whether if the node were already in the list or not
             if( spot == -1 ){ // if the node does not exist
@@ -239,6 +239,8 @@ bool Graph::Create( string fileName ){
 
 
 void Graph::Insert( adjList &aAdj ) { // Insert the node to the right place
+
+    
     int ans = BinaryInsert( 0, adjL.size()-1, aAdj.sid1 ) ;
     
     if( ans = -1 ){ //  the last one
