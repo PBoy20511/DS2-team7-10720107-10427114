@@ -37,7 +37,7 @@ class Graph{
 	
 	vector<adjList> adjL; // the adjacency lists
 	string fileNO ; // a number to form a file name
-	// float wgtLB; // lower bound of weights
+	float wgtLB; // lower bound of weights
 	
 	
 	bool ReadFile( vector<StudentPair> &fileList ) ; // get all records from a file
@@ -56,7 +56,7 @@ class Graph{
 		Graph(): fileNO(""), wgtLB(0){
 		} // default constructor
 		
-		Graph(Graph &obj): adjL( obj.adjL), fileNO(onj.fileNO), wgtLB(0){
+		Graph(Graph &obj): adjL( obj.adjL), fileNO(obj.fileNO), wgtLB(0){
 		} // shallow copy constructor
 		
 		bool Existed(){
@@ -67,7 +67,7 @@ class Graph{
 			wgtLB = v ;
 		} // SetLB */
 		
-		bool readBinary(string fileName){
+		bool ReadFileByP( vector<StudentPair> &fileList, string fileName ){ // ReadFile() made By Peter heheh
 			fstream binFile ;
 			StudentPair oneSt ;
 			int stNo = 0 ;
@@ -80,7 +80,7 @@ class Graph{
 				binFile.seekg(0, binFile.beg) ;
 				for(int i = 0; i < stNo; i++ ){
 					binFile.read((char*)&oneSt, sizeof(oneSt));
-					studentSetZ.push_back(oneSt);
+					fileList.push_back(oneSt);
 					// cout << "[" << i+1 << "]" << studentSetZ[i].sid << "," << oneSt.sname << endl ;
 				} // for
 				
@@ -94,7 +94,7 @@ class Graph{
 		
 		} // readBinary
 		
-	    adjList *FoundNode( string strId ){ // Use Binary Search to find the node we're lookinf for
+	    /*aL *FoundNode( string strId ){ // Use Binary Search to find the node we're lookinf for
 
 	    	int ans = BinarySearch( 0, adjL.size(), strId ) ; // Start to find
 	    	
@@ -102,24 +102,32 @@ class Graph{
 	    		return NULL ;
 			} // if
 			else{
-				return adjL[ans] ;
+				adjList *temp ;
+				temp = adjL[ans] ;
+				return temp ;
 			} // else
 	    	
-		} // HaveAppear
+		} // FoundNode()*/
 		
-		int BinarySearch( int first, int size, string strId ){ // return the position of the thing we're looking for, if nothing, return -1
+		int Locate( string fileName ){
+			int ans = BinarySearch(0, adjL.size()-1 , strId ) ; // Start to find
+			
+			return ans ;
+		} // Locate
+				
+		int BinarySearch( int first, int last, string strId ){ // return the position of the thing we're looking for, if nothing, return -1
 
-			if( size > 0 ){
+			if( last > 0 ){
 				
 				int mid = first + (last - 1) / 2 ;
-				if( strcmp( strId, adjL[mid] ) == 0 ){ // Find the one
+				if( strcmp( strId.c_str(), adjL[mid] ) == 0 ){ // Find the one
 					return mid ;
 				} // if
-				else if( strcmp( strId, adjL[mid] ) < 0 ){
+				else if( strcmp( strId.c_str(), adjL[mid] ) < 0 ){
 					return BinarySearch( first, mid-1, strId );
 				} // else if
 				else{
-					return BinarySearch( mid+1, size, strId ) ;
+					return BinarySearch( mid+1, last, strId ) ;
 				} // else
 				
 			} // if
@@ -180,12 +188,14 @@ class Graph{
 			
 		} // InsertALN
 		
-		
-	    bool Create(); // read pairs from a file into adjacency list
-	    void SaveF() ; // write adjacency lists as a file
-	    
+	
+	
 	    // void compINF( string tempStr ); // compute influnce values by BFS
 	    // void compINF() ; // compute influnce values by DFS
+		
+			
+	    bool Create(); // read pairs from a file into adjacency list
+	    void SaveF() ; // write adjacency lists as a file
 	    
 	    void clearUp(){
 	    	clearUp(adjL);
@@ -197,11 +207,11 @@ class Graph{
 	
 };
 
-bool Graph::Create(){
-	vector<StudentPair> fileList ;
-	adjList aAdj ;
+bool Graph::Create( string fileName ){
+	vector<StudentPair> fileList ; // all the file's record
+	adjList aAdj ;	
 	
-	if( ReadFile( fileList ) ){
+	if( ReadFileByP( fileList, fileName ) ){
         for( int i = 0 ; i < fileList.size() ; i++ ){
         	strcpy( aAdj.sid.c_str() ,fileList[i].sid1 ) ; // save sender
         	
@@ -209,18 +219,20 @@ bool Graph::Create(){
         	strcpy(temp.sid2.c_str(), fileList[i].sid2 ) ; // save receiver
         	temp.weight = fileList[i].wgt ;
         	
-            adjListNode *walk = FoundNode( fileList[i].sid1 ) ; // Check whether if the node were already in the list or not
-            if( walk == NULL ){ // if the node does not exist
-            	Insert( aAdj ) ;
+            int spot = Locate(fileName) ;// Check whether if the node were already in the list or not
+            if( spot == -1 ){ // if the node does not exist
+            	Insert( aAdj ) ; // push_back the aAdj into the vector
 			} // if
 			else{ // the node does exist
                InsertALN( walk, temp ) ; // Insert temp into the right spot
 			} // else
             
 		} // for
+		
+		return true ;
 	} // if
 	else{
-		cout << "No Such File!" ;
+		return flase ;
 	} // else
 	
 } // Creat()
@@ -243,8 +255,35 @@ void Graph::Insert( adjList &aAdj ) { // Insert the node to the right place
 
 
 
+
 int main(){
+	int cmd ;
+	string fileName ;
+	Graph graph;
 	
+	bool haveBin = false ;
+	cout << "Enter CMD:(0)Quit (1)Mission One " ;
+	cin >> cmd ;
+	while( cmd != 0 ){
+	
+		if( cmd == 1 ){
+            cout << "Enter your file name!" ;
+            cin >> fileName ;
+            if( graph.Create(fileName) ){
+            	
+			} // if
+			else{
+				cout << "No Such File!" ;
+			} // else
+		} // if
+        else{
+        	cout << "No Such Cmd!" ;
+		} // else
+		
+		cout << "Enter CMD:(0)Quit (1)Text to Binary (2)Linear Search \n" ;
+		cin >> cmd ;
+		
+    } // while
 } // main()
 
 
