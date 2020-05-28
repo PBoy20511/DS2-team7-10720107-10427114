@@ -71,7 +71,7 @@ class Graph{
 			fstream binFile ;
 			StudentPair oneSt ;
 			int stNo = 0 ;
-			fileName = "input" + fileName + ".bin" ;
+			fileName = "pairs" + fileName + ".bin" ;
 		
 			binFile.open(fileName.c_str(), fstream::in | fstream::binary );
 			if( binFile.is_open()){
@@ -195,7 +195,7 @@ class Graph{
 		
 			
 	    bool Create( string fileName); // read pairs from a file into adjacency list
-	    void SaveF() ; // write adjacency lists as a file
+	    void SaveF( string fileName ) ; // write adjacency lists as a file
 	    
 	    /*void clearUp(){
 	    	clearUp(adjL);
@@ -257,6 +257,15 @@ void Graph::Insert( adjList &aAdj ) { // Insert the node to the right place
 	
 } // Insert()
 
+void Graph::SaveF( string fileName ){
+	fstream  outFile ;
+    fileName = "pairs" + fileName + ".adj" ;
+    outFile.open(fileName.c_str(), ios::out | ios::trunc);
+    
+    outFile << "Hello world!" ;
+    
+} // SaveF()
+
 
 
 
@@ -274,7 +283,7 @@ int main(){
             cout << "Enter your file name!" ;
             cin >> fileName ;
             if( graph.Create(fileName) ){
-            	
+            	graph.SaveF( fileName ) ;
 			} // if
 			else{
 				cout << "No Such File!" ;
