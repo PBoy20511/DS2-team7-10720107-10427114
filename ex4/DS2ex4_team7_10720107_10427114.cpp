@@ -164,14 +164,14 @@ class Graph{
 			
 		} // BinaryInsert
 		
-		void InsertALN( adjList *&list, adjListNode *&node ){ // Insert an adjListNode into an adjList
+		void InsertALN( int spot, adjListNode *&node ){ // Insert an adjListNode into an adjList
         // if i wanna rise up the speed, i should use binary search
         
-			adjListNode *walk ; 
-			walk = list->head ;
+    
 			bool insert = false ;
+			adjListNode *walk ;
 			do{	// find the spot i wanna insert
-				walk->next = walk ;
+				adjL[spot].head = walk ;
 				if( walk->next->sid2 < node->sid2 && walk->sid2 > node->sid2 ){
 					insert = true ;
 				} // if		
@@ -213,10 +213,10 @@ bool Graph::Create( string fileName ){
 	
 	if( ReadFileByP( fileList, fileName ) ){
         for( int i = 0 ; i < fileList.size() ; i++ ){
-        	strcpy( aAdj.sid1.c_str() ,fileList[i].sid1.c_str() ) ; // save sender
+        	aAdj.sid1 = fileList[i].sid1 ; // save sender
         	
         	adjListNode *temp = new adjListNode ;
-        	strcpy(temp->sid2.c_str(), fileList[i].sid2 ) ; // save receiver
+        	temp->sid2 = fileList[i].sid2 ; // save receiver
         	temp->weight = fileList[i].wgt ;
         	
             int spot = Locate(fileName) ;// Check whether if the node were already in the list or not
@@ -224,7 +224,7 @@ bool Graph::Create( string fileName ){
             	Insert( aAdj ) ; // push_back the aAdj into the vector
 			} // if
 			else{ // the node does exist
-               InsertALN( walk, temp ) ; // Insert temp into the right spot
+                InsertALN( spot, temp ) ; // Insert temp into the right spot
 			} // else
             
 		} // for
@@ -232,7 +232,7 @@ bool Graph::Create( string fileName ){
 		return true ;
 	} // if
 	else{
-		return flase ;
+		return false ;
 	} // else
 	
 } // Creat()
@@ -247,10 +247,12 @@ void Graph::Insert( adjList &aAdj ) { // Insert the node to the right place
     	adjL.push_back( aAdj ) ;
 	} // if
 	else if( ans == -2 ){ // the first one
-		adjL.insert( 0, aAdj ) ;
+		adjL.insert( adjL.begin(), aAdj ) ;
 	} // else if
 	else{
-		adjL.insert( ans, aAdj ) ;
+		ans = ans + 1 ;
+		adjL.insert( adjL.begin()+ans, aAdj ) ;
+		
 	} // else
 	
 } // Insert()
