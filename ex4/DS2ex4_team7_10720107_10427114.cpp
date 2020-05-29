@@ -219,7 +219,7 @@ bool Graph::Create( string fileName ){
         	temp->sid2 = fileList[i].sid2 ; // save receiver
         	temp->weight = fileList[i].wgt ;
         	
-            int spot = Locate(fileName) ;// Check whether if the node were already in the list or not
+            int spot = Locate(aAdj.sid1) ;// Check whether if the node were already in the list or not
             if( spot == -1 ){ // if the node does not exist
             	Insert( aAdj ) ; // push_back the aAdj into the vector
 			} // if
@@ -293,7 +293,7 @@ int main(){
         	cout << "No Such Cmd!" ;
 		} // else
 		
-		cout << "Enter CMD:(0)Quit (1)Text to Binary (2)Linear Search \n" ;
+		cout << "Enter CMD:(0)Quit (1)Quit (2)Mission One \n" ;
 		cin >> cmd ;
 		
     } // while
