@@ -206,33 +206,45 @@ class Graph{
 				} // if
 			} // while
 			
-			
-			
 		} // InsertNode_Z
 		
 		
 		void InsertNode( adjListNode* &head, adjListNode* &aNode ){
-			
-			bool insert = false ;
+	
 			
 			if( head == NULL ){
 				head = aNode ;
 			} // if
 			else if( head->next == NULL ){
+				
 				if( strcmp(head->sid2.c_str(), aNode->sid2.c_str()) > 0 ){ 
 				    aNode->next = head ;
 					head = aNode ;
 				} // if
+				else if( strcmp(head->sid2.c_str(), aNode->sid2.c_str()) == 0 ){ 
+				    aNode->next = head ;
+					head = aNode ;
+				} // else if
 				else{
 					head->next = aNode ;
 				} // else
+				
 			} // else if
 			else{
+				
                 if( strcmp(head->sid2.c_str(), aNode->sid2.c_str()) > 0 ){
                 	aNode->next = head ;
 					head = aNode ;
 				} // if
+				else if( strcmp(head->sid2.c_str(), aNode->sid2.c_str()) == 0 ){
+                	aNode->next = head ;
+					head = aNode ;
+				} // else if
 				else if( strcmp(head->next->sid2.c_str(), aNode->sid2.c_str()) > 0 ){
+					aNode->next = head->next ;
+					head->next = aNode ;
+				} // else if
+				else if( strcmp(head->next->sid2.c_str(), aNode->sid2.c_str()) == 0 ){
 					aNode->next = head->next ;
 					head->next = aNode ;
 				} // else if
@@ -259,7 +271,6 @@ class Graph{
 		
 		
 		
-			
 	    bool Create( string fileName ){ // read pairs from a file into adjacency list
 	        vector<StudentPair> sList ;
 	        adjList aAdj ;
@@ -337,8 +348,13 @@ class Graph{
 					    cout << "[" << i << "] sid1 isn't new on list'\n" ;
 					} // else
 					
+					aAdj.sid1 = "" ;
 					aNode->next = NULL ;
+					aNode->sid2 = "" ;
+					
+					bAdj.sid1 = "" ;
 					bNode->next = NULL ;
+					bNode->sid2 = "" ;
 				} // for
 				
 				
