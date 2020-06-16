@@ -287,11 +287,13 @@ class Graph{
 	                aNode->next == NULL ;
 	                cout << "[" << i << "] save s&r\n" ;
 						
-	                bAdj.sid1 = charToString( sList[i].sid2 ) ; // sender
+	                bAdj.sid1 = charToString( sList[i].sid2 ) ; // sender2
 	        	    bAdj.head == NULL ;
-	           	    bNode->sid2 = charToString( sList[i].sid1 ) ; // reciever
+	           	    bNode->sid2 = charToString( sList[i].sid1 ) ; // reciever2
 	           	    bNode->weight = sList[i].wgt ;
 	                bNode->next == NULL ;
+	                cout << "[" << i << "] sid1: " << aAdj.sid1 ;
+	                cout << "sid2: " << bAdj.sid1 << "\n" ;
 	                
 	                //cout << "sid1:"<< aAdj.sid1 << "\n" ;
 	                //cout << "sid2:"<< aNode->sid2 << "\n" ;
@@ -314,28 +316,29 @@ class Graph{
 						
 						InsertNode( bAdj.head, bNode ) ;
 						adjL.push_back(bAdj) ;
-						cout << "[" << i << "] newOnTheList\n" ;
+						cout << "[" << i << "] sid2 newOnTheList\n" ;
 						
 					} // if
 					else{ // if it isn't new on the list
 					    
 					    InsertNode( adjL[spot2].head, bNode ) ;
-					    cout << "[" << i << "] isn't new on list'\n" ;
+					    cout << "[" << i << "] sid2 isn't new on list'\n" ;
 					} // else
 					
 					if( spot1 == -1 ){ // if this is new on the list
 						InsertNode( aAdj.head, aNode ) ;
 						adjL.push_back(aAdj) ;
-						cout << "[" << i << "] newOnTheList\n" ;
+						cout << "[" << i << "] sid1 newOnTheList\n" ;
 						
 					} // if
 					else{ // if it isn't new on the list
 					    
 					    InsertNode( adjL[spot1].head, aNode ) ;
-					    cout << "[" << i << "] isn't new on list'\n" ;
+					    cout << "[" << i << "] sid1 isn't new on list'\n" ;
 					} // else
 					
-					
+					aNode->next = NULL ;
+					bNode->next = NULL ;
 				} // for
 				
 				
@@ -416,6 +419,8 @@ int main(){
 		cin >> cmd ;
 		
     } // while
+    
+    
 } // main()
 
 
