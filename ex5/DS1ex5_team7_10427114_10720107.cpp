@@ -41,6 +41,10 @@ class Graph{
 		Graph(): fileNO(""), wgtLB(0){
 		} // default constructor
 		
+		~Graph(){
+			
+		} // destructor
+		
 		Graph(Graph &obj): adjL( obj.adjL), fileNO(obj.fileNO), wgtLB(0){
 		} // shallow copy constructor
 		
@@ -48,9 +52,9 @@ class Graph{
 			return adjL.size();
 		} // Exsited
 		
-		/*void SetLB( float v ){ // set up the velue of wgtLB
-			wgtLB = v ;
-		} // SetLB */
+		
+		
+		
 		
 		bool ReadFileByP( vector<StudentPair> &fileList, string fileName ){ // ReadFile() made By Peter heheh
 			fstream binFile ;
@@ -101,6 +105,9 @@ class Graph{
 			
 			return ans ;
 		} // Locate
+		
+		
+		
 				
 		int BinarySearch( int first, int last, string strId ){ // return the position of the thing we're looking for, if nothing, return -1
             int num = last - first ;
@@ -125,18 +132,26 @@ class Graph{
 			
 		} // BinarySearch
 		
-		int Search( string strid ){
+		
+		
+		
+		int StupidSearch( string strid ){
 			int ans = -1 ;
+			bool found = false ;
 			
-			for( int i = 0; i < adjL.size(); i++ ){
+			for( int i = 0; i < adjL.size(); i++ && !found ){
 				if( strcmp(strid.c_str(), adjL[i].sid1.c_str()) == 0 ){
 					ans = i ;
+					found = true ;
 				} // if
 			} // for
 			
 			return ans ;
 			
-		} // Search
+		} // StupidSearch
+		
+		
+		
 
 		void InsertALN( int spot, adjListNode *&node ){ // Insert an adjListNode into an adjList
         // if i wanna rise up the speed, i should use binary search
@@ -162,7 +177,9 @@ class Graph{
 			
 		} // InsertALN
 		
-		void BSort(){
+		
+		
+		void BSort(){ // Bubble Sort
 			for( int i = 0; i < adjL.size(); i++ ){
 				for( int j = i ; j < adjL.size() ; j++ ){
 					if( strcmp(adjL[j].sid1.c_str(), adjL[i].sid1.c_str() ) < 0 ){
@@ -173,6 +190,26 @@ class Graph{
 				} // for
 			} // for
 		} //BSort()
+		
+		
+		
+		void InsertNode_Z( adjListNode* &head, adjListNode* &aNode ){
+			bool insert = false ;
+			adjListNode* walk = head ;
+			if( head == NULL ){
+				head = aNode ;
+			} // if
+			
+			while( walk->next != NULL && !insert ){
+				if( walk->next->sid2 > aNode->sid2 ){
+					
+				} // if
+			} // while
+			
+			
+			
+		} // InsertNode_Z
+		
 		
 		void InsertNode( adjListNode* &head, adjListNode* &aNode ){
 			
@@ -191,18 +228,26 @@ class Graph{
 				} // else
 			} // else if
 			else{
-                if( strcmp(head->next->sid2.c_str(), aNode->sid2.c_str()) > 0 ){
-                    aNode->next = head->next ;
-                    head = aNode ;
+                if( strcmp(head->sid2.c_str(), aNode->sid2.c_str()) > 0 ){
+                	aNode->next = head ;
+					head = aNode ;
 				} // if
+				else if( strcmp(head->next->sid2.c_str(), aNode->sid2.c_str()) > 0 ){
+					aNode->next = head->next ;
+					head->next = aNode ;
+				} // else if
 				else{
 					InsertNode( head->next, aNode ) ;
 				} // else
+				
 			} // else
 
 		} // InsertNode
+		
+		
+		
 	    
-	    string charToString( char array[10] ){
+	    string charToString( char array[10] ){ // convert an char array to string
 	    	string ans = "" ;
 	    	for( int i = 0 ; i < 10 ; i++ ){
 	    		ans = ans + array[i] ;
@@ -210,6 +255,9 @@ class Graph{
 			
 			return ans ;
 		} // charToString
+		
+		
+		
 		
 			
 	    bool Create( string fileName ){ // read pairs from a file into adjacency list
@@ -220,49 +268,76 @@ class Graph{
 	        adjListNode* aNode = new adjListNode ;
 	        aNode->next = NULL ;
 	        
+	        adjList bAdj ;
+	        bAdj.head = NULL ;
+			adjListNode* bNode = new adjListNode ;
+	        bNode->next = NULL ; // use sid2 to make sender 
+	        
 	        if( ReadFileByP(sList, fileName ) ){
 	        	
 	        	//cout << "size:" << sList.size() << "\n";
 	        	
 	        	for( int i = 0 ; i < sList.size() ; i++ ){ //PushBack all deta into adjL
+	        	
 	        	    //1. save sender&receiver
 	        	    aAdj.sid1 = charToString( sList[i].sid1 ) ; // sender
+	        	    aAdj.head == NULL ;
 	                aNode->sid2 = charToString( sList[i].sid2 ) ; // reciever
 	                aNode->weight = sList[i].wgt ;
 	                aNode->next == NULL ;
+	                cout << "[" << i << "] save s&r\n" ;
+						
+	                bAdj.sid1 = charToString( sList[i].sid2 ) ; // sender
+	        	    bAdj.head == NULL ;
+	           	    bNode->sid2 = charToString( sList[i].sid1 ) ; // reciever
+	           	    bNode->weight = sList[i].wgt ;
+	                bNode->next == NULL ;
 	                
 	                //cout << "sid1:"<< aAdj.sid1 << "\n" ;
 	                //cout << "sid2:"<< aNode->sid2 << "\n" ;
 	                
-	                int spot1 = Search(aAdj.sid1) ;
-	                int spot2 = Search(aNode->sid2) ;
+	                int spot1 = StupidSearch(aAdj.sid1) ; // find if there is a sid1
+	                int spot2 = StupidSearch(aNode->sid2) ; // find if there is a sid2
+	                cout << "[" << i << "] StupidSearch\n" ;
 	                cout << "Spot1:" << spot1 << "\n";
 	                cout << "Spot2:" << spot2 << "\n";
 	                
-	                if( spot2 == -1 ){ // if receiver's id heven't show up in the list yet
+	                /*if( spot2 == -1 ){ // if receiver's id heven't show up in the list yet
 	                    adjList bAdj ;
 						bAdj.sid1 = aNode->sid2 ;
 						bAdj.head = NULL ;
-						adjL.push_back(bAdj) ;	
+						adjL.push_back(bAdj) ;
 					} // if
+					cout << "[" << i << "] Check Spot2 Exist\n" ;*/
 					
+					if( spot2 == -1 ){ // if receiver's id heven't show up in the list yet
+						
+						InsertNode( bAdj.head, bNode ) ;
+						adjL.push_back(bAdj) ;
+						cout << "[" << i << "] newOnTheList\n" ;
+						
+					} // if
+					else{ // if it isn't new on the list
+					    
+					    InsertNode( adjL[spot2].head, bNode ) ;
+					    cout << "[" << i << "] isn't new on list'\n" ;
+					} // else
 					
 					if( spot1 == -1 ){ // if this is new on the list
-					   
-					    
 						InsertNode( aAdj.head, aNode ) ;
-						
-						//cout << "hi" ;
 						adjL.push_back(aAdj) ;
+						cout << "[" << i << "] newOnTheList\n" ;
+						
 					} // if
 					else{ // if it isn't new on the list
 					    
 					    InsertNode( adjL[spot1].head, aNode ) ;
+					    cout << "[" << i << "] isn't new on list'\n" ;
 					} // else
 					
 					
-					
 				} // for
+				
 				
                 BSort() ;
 	        	
@@ -273,15 +348,34 @@ class Graph{
 			} // else
 	    
 		} // Create
-	    void SaveF( string fileName ) ; // write adjacency lists as a file
-	    
-	    /*void clearUp(){
-	    	clearUp(adjL);
-		} // ClearUp*/
 		
-		~Graph(){
-			
-		} // destructor
+		
+		
+		
+        void SaveF( string fileName ){
+	        fstream  outFile ;
+            fileName = "pairs" + fileName + ".adj" ;
+            outFile.open(fileName.c_str(), ios::out | ios::trunc);
+    
+    
+            cout << adjL.size() ;
+    
+            for( int i = 0 ; i < adjL.size() ; i++ ){
+    	        outFile << "[" << i+1 << "]" ;
+    	        outFile << ":" << adjL[i].sid1 << "\n" ;
+    	
+	        } // ofr
+    
+    
+        } // SaveF()
+
+
+
+
+        void CreateDFS(){ // use adjL's list to find connected component
+        	
+	    } // CreateDFS
+
 	
 };
 
@@ -289,20 +383,45 @@ class Graph{
 
 
 
-void Graph::SaveF( string fileName ){
-	fstream  outFile ;
-    fileName = "pairs" + fileName + ".adj" ;
-    outFile.open(fileName.c_str(), ios::out | ios::trunc);
-    
-    
-    cout << adjL.size() ;
-    
-    for( int i = 0 ; i < adjL.size() ; i++ ){
-    	outFile << "[" << i+1 << "]" ;
-    	outFile << ":" << adjL[i].sid1 << "\n" ;
-    	
-    	
-	} // ofr
-    
-    
-} // SaveF()
+
+int main(){
+	int cmd ;
+	string fileName ;
+	Graph graph;
+	
+	bool haveBin = false ;
+	cout << "Enter CMD:(0)Quit (1)Create List (2)DFS " ;
+	cin >> cmd ;
+	while( cmd != 0 ){
+	
+		if( cmd == 1 ){
+            cout << "Enter your file name:" ;
+            cin >> fileName ;
+            if( graph.Create(fileName) ){
+            	graph.SaveF( fileName ) ;
+			} // if
+			else{
+				cout << "No Such File!\n" ;
+			} // else
+		} // if
+		else if( cmd == 1 ){
+			
+			graph.CreateDFS();
+		} // else if
+        else{
+        	cout << "No Such Cmd!" ;
+		} // else
+		
+		cout << "Enter CMD:(0)Quit (1)Text to Binary (2)Linear Search \n" ;
+		cin >> cmd ;
+		
+    } // while
+} // main()
+
+
+
+
+
+
+
+
