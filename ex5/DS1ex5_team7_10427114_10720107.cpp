@@ -1,4 +1,4 @@
-// 10720107 ���A�� 10427114 ���[�@ �ЧU�ФU��Github��������
+// 10720107 陳丕中 10427114 熊觀一 請助教下載Github版本評分
 
 #include<iostream>
 #include<fstream>
