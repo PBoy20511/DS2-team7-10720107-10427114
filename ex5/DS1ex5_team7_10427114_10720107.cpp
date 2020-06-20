@@ -30,6 +30,7 @@ class Graph{
 		string sid1 ; // sender
 		adjListNode *head; // pointer to the first node of a list
 		int inf ; // influence value
+		bool visited ;
 	}adjList;
 	
 	vector<adjList> adjL; // the adjacency lists
@@ -179,7 +180,7 @@ class Graph{
 		
 		
 		
-		void BSort(){ // Bubble Sort
+		void Sort(){ // Bubble Sort
 			for( int i = 0; i < adjL.size(); i++ ){
 				for( int j = i ; j < adjL.size() ; j++ ){
 					if( strcmp(adjL[j].sid1.c_str(), adjL[i].sid1.c_str() ) < 0 ){
@@ -293,6 +294,7 @@ class Graph{
 	        	    //1. save sender&receiver
 	        	    aAdj.sid1 = charToString( sList[i].sid1 ) ; // sender
 	        	    aAdj.head == NULL ;
+	        	    aAdj.visited = false ;
 	                aNode->sid2 = charToString( sList[i].sid2 ) ; // reciever
 	                aNode->weight = sList[i].wgt ;
 	                aNode->next == NULL ;
@@ -300,6 +302,7 @@ class Graph{
 						
 	                bAdj.sid1 = charToString( sList[i].sid2 ) ; // sender2
 	        	    bAdj.head == NULL ;
+	        	    bAdj.visited = false ;
 	           	    bNode->sid2 = charToString( sList[i].sid1 ) ; // reciever2
 	           	    bNode->weight = sList[i].wgt ;
 	                bNode->next == NULL ;
@@ -358,7 +361,7 @@ class Graph{
 				} // for
 				
 				
-                BSort() ;
+                Sort() ;
 	        	
 	        	return true ;
 			} // if
@@ -391,10 +394,25 @@ class Graph{
 
 
 
-        void CreateDFS(){ // use adjL's list to find connected component
-        	
+        void FindCC(){ // use adjL's list to find connected component
+        	for( int i = 0 ; i < adjL.size ; i++ ){
+        		if( !adjL[i].visited ){
+        			DFS( adjL[i] ) ;
+				} // if
+			} // for
 	    } // CreateDFS
 
+
+        void DFS( adjList item ){
+        	item.visited = true ;
+        	adjListNode* walk = head ;
+        	while( walk != NULL ){
+        		int spot = StupidSearch(walk->sid2) ;
+        		if( !adjL[spot].visited ){
+        			DFS(adjL[spot].visited) ;
+				} // if
+			} // while
+		} // DFS
 	
 };
 
@@ -423,9 +441,9 @@ int main(){
 				cout << "No Such File!\n" ;
 			} // else
 		} // if
-		else if( cmd == 1 ){
+		else if( cmd == 2 ){
 			
-			graph.CreateDFS();
+			graph.FindCC();
 		} // else if
         else{
         	cout << "No Such Cmd!" ;
