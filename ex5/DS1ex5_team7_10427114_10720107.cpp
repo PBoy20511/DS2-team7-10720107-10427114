@@ -395,9 +395,9 @@ class Graph{
 
 
         void FindCC(){ // use adjL's list to find connected component
-        	for( int i = 0 ; i < adjL.size ; i++ ){
+        	for( int i = 0 ; i < adjL.size() ; i++ ){
         		if( !adjL[i].visited ){
-        			DFS( adjL[i] ) ;
+        			DFS( adjL[i] ) ; // Do DFS
 				} // if
 			} // for
 	    } // CreateDFS
@@ -405,11 +405,11 @@ class Graph{
 
         void DFS( adjList item ){
         	item.visited = true ;
-        	adjListNode* walk = head ;
+        	adjListNode* walk = item.head ;
         	while( walk != NULL ){
         		int spot = StupidSearch(walk->sid2) ;
         		if( !adjL[spot].visited ){
-        			DFS(adjL[spot].visited) ;
+        			DFS(adjL[spot]) ;
 				} // if
 			} // while
 		} // DFS
