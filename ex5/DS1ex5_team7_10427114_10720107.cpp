@@ -10,6 +10,7 @@
 #include<queue>
 #include<stack>
 #include<algorithm>
+#include <sstream>
 
 using namespace std ;
 class Graph{
@@ -34,6 +35,7 @@ class Graph{
 	}adjList;
 	
 	vector<adjList> adjL; // the adjacency lists
+	vector<adjList> adjLDFS ;
 	string fileNO ; // a number to form a file name
 	float wgtLB; // lower bound of weights
 	
@@ -277,6 +279,7 @@ class Graph{
 	        adjList aAdj ;
 	        aAdj.head = NULL ;
 	        
+	        
 	        adjListNode* aNode = new adjListNode ;
 	        aNode->next = NULL ;
 	        
@@ -285,6 +288,8 @@ class Graph{
 			adjListNode* bNode = new adjListNode ;
 	        bNode->next = NULL ; // use sid2 to make sender 
 	        
+	        cout << "Please enter wgtLB" ; 
+	        cin >> wgtLB ;    
 	        if( ReadFileByP(sList, fileName ) ){
 	        	
 	        	//cout << "size:" << sList.size() << "\n";
@@ -376,7 +381,11 @@ class Graph{
 		
         void SaveF( string fileName ){
 	        fstream  outFile ;
-            fileName = "pairs" + fileName + ".adj" ;
+	        ostringstream ss;
+            ss << wgtLB;
+            string s(ss.str());
+            
+            fileName = "pairs" + fileName + "_" + s + ".adj" ;
             outFile.open(fileName.c_str(), ios::out | ios::trunc);
     
     
@@ -405,14 +414,37 @@ class Graph{
 
         void DFS( adjList item ){
         	item.visited = true ;
+        	adjLDFS.push_back( item ) ;
         	adjListNode* walk = item.head ;
         	while( walk != NULL ){
         		int spot = StupidSearch(walk->sid2) ;
         		if( !adjL[spot].visited ){
         			DFS(adjL[spot]) ;
 				} // if
+				
+			    walk=walk->next ;
 			} // while
 		} // DFS
+		
+		
+		void SaveDFS( string fileName ){
+	        fstream  outFile ;
+	        ostringstream ss;
+            ss << wgtLB;
+            string s(ss.str());
+	        
+            fileName = "pairs" + fileName + "_" + s + ".cc" ;
+            outFile.open(fileName.c_str(), ios::out | ios::trunc);
+    
+    
+            // cout << adjL.size() ;
+    
+            for( int i = 0 ; i < adjL.size() ; i++ ){
+    	        outFile << "[" << i+1 << "]" ;
+    	        outFile << ":" << adjLDFS[i].sid1 << "\n" ;
+    	
+	        } // ofr	
+		} // void
 	
 };
 
@@ -425,6 +457,7 @@ int main(){
 	int cmd ;
 	string fileName ;
 	Graph graph;
+	bool haveAdj = false ;
 	
 	bool haveBin = false ;
 	cout << "Enter CMD:(0)Quit (1)Create List (2)DFS " ;
@@ -436,14 +469,19 @@ int main(){
             cin >> fileName ;
             if( graph.Create(fileName) ){
             	graph.SaveF( fileName ) ;
+            	haveAdj = true ;
 			} // if
 			else{
 				cout << "No Such File!\n" ;
 			} // else
 		} // if
 		else if( cmd == 2 ){
-			
-			graph.FindCC();
+			if( haveAdj ){
+				graph.FindCC();
+			} // if
+			else{
+				cout << "Please Make a ADJ List first!!" ;
+			} // else
 		} // else if
         else{
         	cout << "No Such Cmd!" ;
